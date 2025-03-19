@@ -5,11 +5,12 @@ BONUS_NAME	= 	_bonus
 HEADER	=	minishell.h
 
 CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror -O2 -g
+CFLAGS	=	-Wall -Wextra -Werror -O2 -g -fsanitize=address -fno-omit-frame-pointer
 
 # Libft directory
-LIBFT_DIR = ./libft
-LIBFT = $(LIBFT_DIR)/libft.a
+LIBFT_DIR	=	./libft
+LIBFT		=	$(LIBFT_DIR)/libft.a
+LIBS		=	-lreadline -lncurses
 
 SRC_DIR			=	src
 OBJ_DIR			=	src_o
@@ -60,7 +61,7 @@ all: $(NAME)
 	@echo "$(WHITE)"
 
 $(NAME): $(OBJ) $(LIBFT)
-	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJ) -L$(LIBFT_DIR) -lft $(LIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) -c $< -o $@
