@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/19 16:24:55 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/21 15:49:54 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,31 @@ typedef enum token_type
 	TOKEN_REDIRECT,
 	TOKEN_LOGICAL_OP,
 	TOKEN_FILENAME,
-	TOKEN_UNKNOWN
+	TOKEN_UNKNOWN,
+	TOKEN_ARGS
 }	t_token_type;
 
 typedef struct s_tocken
 {
 	t_token_type	type;
-	char			value[256];
+	char			*value;
 	struct s_tocken	*next;
 }	t_token;
+
+typedef struct s_data
+{
+	t_token	*tokens;
+	char	*input;
+}		t_data;
+
+//-------------------------------UTILS----------------------------------//
+int		ft_isspace(int c);
+
+//-----------------------------FREE/ERROR-------------------------------//
+void	free_linked(t_token *head);
+void	close_pros(t_data *data);
+
+//------------------------LINKED LIST FUNCTIONS-------------------------//
+void	append(t_token **head, t_token_type type, char *value);
 
 #endif // !MINISHELL_H

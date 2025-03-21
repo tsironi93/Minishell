@@ -6,47 +6,13 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/19 17:05:15 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/21 15:52:09 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <ctype.h>	// For isspace! //TODO
-#include <stdio.h>
 
-void	close_pros(void)
-{
-	exit (EXIT_SUCCESS);
-}
-
-t_token	*create_token(t_token_type type, char *value)
-{
-	t_token	*new_token;
-
-	new_token = (t_token *)malloc(sizeof(t_token));
-	if (!new_token)
-		return (NULL);
-	new_token->type = type;
-	ft_strlcpy(new_token->value, value, ft_strlen(value));
-	new_token->next = NULL;
-	return (new_token);
-}
-
-void	append(t_token **head, t_token_type type, char *value)
-{
-	t_token	*new_token;
-	t_token	*temp;
-
-	new_token = create_token(type, value);
-	if (!new_token)
-		return ;
-	temp = *head;
-	while (temp->next)
-		temp = temp->next;
-	temp->next = new_token;
-}
-
-void	lexer(char *input, t_token *token)
+void	lexer(char *input, t_token **token)
 {
 	int		i;
 	char	buffer[256];
@@ -55,7 +21,7 @@ void	lexer(char *input, t_token *token)
 	i = 0;
 	while (input[i])
 	{
-		if (isspace(input[i])) // TODO isspace function
+		if (ft_isspace(input[i]))
 		{
 			i++;
 			continue ;
@@ -66,31 +32,41 @@ void	lexer(char *input, t_token *token)
 			while (ft_isalpha(input[i]) || input[i] == '/')
 				buffer[pos++] = input[i++];
 			buffer[pos] = '\0';
-			append(&token, TOKEN_COMMAND, buffer);
+			append(token, TOKEN_COMMAND, buffer);
 		}
 		else if (input[i] == '"')
 		{
-			i++;
 			pos = 0;
+			buffer[pos++] = input[i++];
 			while (input[i] && input[i] != '"')
 				buffer[pos++] = input[i++];
-			buffer[pos] = '\0';
+			buffer[pos] = '"';
+			buffer[++pos] = '\0';
 			i++;
-			append(&token, TOKEN_STRING, buffer);
+			append(token, TOKEN_STRING, buffer);
+		}
+		else if (input[i] == '-')
+		{
+			pos = 0;
+			buffer[pos++] = input[i++];
+			while (input[i] && ft_isalpha(input[i]))
+				buffer[pos++] = input[i++];
+			buffer[pos] = '\0';
+			append(token, TOKEN_ARGS, buffer);
 		}
 		else if (input[i++] == '|')
-			append(&token, TOKEN_PIPE, buffer);
+			append(token, TOKEN_PIPE, "|");
 		else if (input[i++] == '>')
-			append(&token, TOKEN_REDIRECT, buffer);
+			append(token, TOKEN_REDIRECT, ">");
 		else if (input [i++] == '&')
-			append(&token, TOKEN_LOGICAL_OP, buffer);
+			append(token, TOKEN_LOGICAL_OP, "&");
 		else
 		{
 			pos = 0;
-			while (input[i] && !isspace(input[i]) && input[i] != '|' && input[i] != '&' && input[i] != '>')
+			while (input[i] && !ft_isspace(input[i]) && input[i] != '|' && input[i] != '&' && input[i] != '>')
 				buffer[pos++] = input[i++];
 			buffer[pos] = '\0';
-			append(&token, TOKEN_FILENAME, buffer);
+			append(token, TOKEN_FILENAME, buffer);
 		}
 	}
 }
@@ -98,23 +74,28 @@ void	lexer(char *input, t_token *token)
 int	main(void)
 {
 	t_token	*token;
-	char	*input;
+	t_data	data;
 
 	token = NULL;
+	data.tokens = token;
 	printf(CYAN "\n\n\t\tHello Malaka\n\n");
 	while (1)
 	{
-		input = readline("~>:");
-		if (!input)
+		data.input = readline("~>:");
+		if (!data.input)
 			break ;
-		if (*input)
-			add_history(input);
-		if (!ft_strncmp(input, "exit", 5))	//TODO NEEDS to BE strcmp
-			close_pros();
-		lexer(input, token);
-		while (token->next)
+		if (*data.input)
+			add_history(data.input);
+		if (!ft_strncmp(data.input, "exit", 5))	//TODO NEEDS to BE strcmp
+			close_pros(&data);
+		lexer(data.input, &token);
+		while (token)
+		{
 			printf("%s\n", token->value);
-		free (input);
+			token = token->next;
+		}
+		free_linked(token);
+		free (data.input);
 	}
-	return (0);
+	exit(EXIT_SUCCESS);
 }
