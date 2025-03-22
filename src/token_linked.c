@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:14:37 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/21 15:16:44 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/22 18:04:54 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	close_pros(t_data *data)
 	exit (EXIT_SUCCESS);
 }
 
-static t_token	*_create_token(t_token_type type, char *value)
+static t_token	*_create_token(char *value, t_token_type type)
 {
 	t_token	*new_token;
 
@@ -45,16 +45,17 @@ static t_token	*_create_token(t_token_type type, char *value)
 	return (new_token);
 }
 
-void	append(t_token **head, t_token_type type, char *value)
+void	append(t_token **head, char *value, t_token_type type)
 {
 	t_token	*new_token;
 	t_token	*temp;
 
-	new_token = _create_token(type, value);
+	new_token = _create_token(value, type);
 	if (!new_token)
 		return ;
 	if (*head == NULL)
 	{
+		new_token->previous = NULL;
 		*head = new_token;
 		return ;
 	}
@@ -62,4 +63,19 @@ void	append(t_token **head, t_token_type type, char *value)
 	while (temp->next)
 		temp = temp->next;
 	temp->next = new_token;
+	new_token->previous = temp;
+}
+
+t_token	*search_tokens(t_token **token, t_token_type type)
+{
+	t_token	*temp;
+
+	temp = *token;
+	while (temp)
+	{
+		if (temp->type == type)
+			return (temp);
+		temp = temp->next;
+	}
+	return (NULL);
 }

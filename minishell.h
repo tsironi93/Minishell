@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/21 15:49:54 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/22 17:59:42 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,16 @@
 
 typedef enum token_type
 {
-	TOKEN_COMMAND,
-	TOKEN_STRING,
-	TOKEN_PIPE,
-	TOKEN_REDIRECT,
-	TOKEN_LOGICAL_OP,
-	TOKEN_FILENAME,
-	TOKEN_UNKNOWN,
-	TOKEN_ARGS
+	COMMAND,
+	DOUBLE_QUOTES,
+	SINGLE_QUOTES,
+	PIPE,
+	REDIRECT_INP,
+	REDIRECT_OUT,
+	FILENAME_INP,
+	FILENAME_OUT,
+	UNKNOWN,
+	ARGS
 }	t_token_type;
 
 typedef struct s_tocken
@@ -59,22 +61,36 @@ typedef struct s_tocken
 	t_token_type	type;
 	char			*value;
 	struct s_tocken	*next;
+	struct s_tocken	*previous;
 }	t_token;
 
 typedef struct s_data
 {
 	t_token	*tokens;
 	char	*input;
+	char	**env_paths;
 }		t_data;
 
 //-------------------------------UTILS----------------------------------//
+
 int		ft_isspace(int c);
 
 //-----------------------------FREE/ERROR-------------------------------//
+
 void	free_linked(t_token *head);
+void	free2d(char **a);
 void	close_pros(t_data *data);
 
 //------------------------LINKED LIST FUNCTIONS-------------------------//
-void	append(t_token **head, t_token_type type, char *value);
+
+void	append(t_token **head, char *value, t_token_type type);
+
+//------------------------------INIT------------------------------------//
+
+void	lexer(char *input, t_token **token);
+
+//--------------------------TESTING_BENCH-------------------------------//
+
+void	print_tokens(t_token **token);
 
 #endif // !MINISHELL_H
