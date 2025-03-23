@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/22 17:59:42 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/23 17:51:13 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,18 @@ typedef enum token_type
 	FILENAME_INP,
 	FILENAME_OUT,
 	UNKNOWN,
-	ARGS
+	ARGS,
+	HERE_DOC,
+	APPEND_FILENAME_OUT,
+	HERE_DOC_OPT,
+	APPEND
 }	t_token_type;
+
+typedef struct s_env
+{
+	char			*str;
+	struct s_env	*next;
+}	t_env;
 
 typedef struct s_tocken
 {
@@ -83,14 +93,23 @@ void	close_pros(t_data *data);
 
 //------------------------LINKED LIST FUNCTIONS-------------------------//
 
-void	append(t_token **head, char *value, t_token_type type);
+void	append_node(t_env **head, char *value);
+void	append_token(t_token **head, char *value, t_token_type type);
+t_token	*search_tokens(t_token **token, t_token_type type);
 
 //------------------------------INIT------------------------------------//
 
 void	lexer(char *input, t_token **token);
+void	expansion(t_token **token);
+
+//----------------------------EXECUTION---------------------------------//
+
+void	try_to_exec(t_data *data, t_token **token, char **env);
 
 //--------------------------TESTING_BENCH-------------------------------//
 
+void	print_tokens(t_token **token);
+void	print_linked(t_env **ll);
 void	print_tokens(t_token **token);
 
 #endif // !MINISHELL_H

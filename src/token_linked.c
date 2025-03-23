@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:14:37 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/22 18:04:54 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/23 17:44:59 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static t_token	*_create_token(char *value, t_token_type type)
 	return (new_token);
 }
 
-void	append(t_token **head, char *value, t_token_type type)
+void	append_token(t_token **head, char *value, t_token_type type)
 {
 	t_token	*new_token;
 	t_token	*temp;
@@ -70,6 +70,8 @@ t_token	*search_tokens(t_token **token, t_token_type type)
 {
 	t_token	*temp;
 
+	if (!token || !*token)
+		return (NULL);
 	temp = *token;
 	while (temp)
 	{

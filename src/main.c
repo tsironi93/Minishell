@@ -6,81 +6,84 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/22 18:06:59 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/23 18:03:11 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*static char	*_find_exec(char *cmd, char **dirs)
-{
-	char	*path;
-	char	*tmp;
-
-	while (*dirs)
-	{
-		tmp = ft_strjoin(*dirs, "/");
-		path = ft_strjoin(tmp, cmd);
-		free(tmp);
-		if (access(path, X_OK) == 0)
-			return (path);
-		free(path);
-		dirs++;
-	}
-	//error_handler("command not found", errno);
-	return (NULL);
-}*/
-
-/*void	try_to_exec(t_data *data, t_token **token, char **env)
+void	classify_tokens(t_token **token)
 {
 	t_token	*temp;
-	char	**cmd;
-	char	*cmd_path;
-	int		pid;
 
 	temp = *token;
-	while (temp)
+	while (search_tokens(&temp, REDIRECT_INP))
 	{
-		if (temp->type == TOKEN_COMMAND)
-			break ;
+		temp = search_tokens(&temp, REDIRECT_INP);
+		temp->next->type = FILENAME_INP;
 		temp = temp->next;
 	}
-	if (!temp)
-		return ;
-	cmd_path = _find_exec(temp->value, data->env_paths);
-	if (!cmd_path)
-		return ;
-	cmd = malloc(3 * sizeof(char *));
-	cmd[0] = ft_strdup(temp->value);
-	while (temp)
+	temp = *token;
+	while (search_tokens(&temp, REDIRECT_OUT))
 	{
-		if (temp->type == 1)
-			break ;
+		temp = search_tokens(&temp, REDIRECT_OUT);
+		temp->next->type = FILENAME_OUT;
 		temp = temp->next;
 	}
-	if (temp->type != 1)
-		return ;
-	cmd[1] = ft_strdup(temp->value);
-	cmd[2] = NULL;
-	pid = fork();
-	if (pid == 0)
-		execve(cmd_path, cmd, env);
-	waitpid(pid, NULL, 0);
-	free2d(cmd);
-	cmd = NULL;
-}*/
+	temp = *token;
+	while (search_tokens(&temp, APPEND))
+	{
+		temp = search_tokens(&temp, APPEND);
+		temp->next->type = APPEND_FILENAME_OUT;
+		temp = temp->next;
+	}
+	temp = *token;
+	while (search_tokens(&temp, HERE_DOC))
+	{
+		temp = search_tokens(&temp, HERE_DOC);
+		temp->next->type = HERE_DOC_OPT;
+		temp = temp->next;
+	}
+	temp = *token;
+	temp = search_tokens(token, UNKNOWN);
+	if (temp)
+		temp->type = COMMAND;
+	while (search_tokens(&temp, PIPE))
+	{
+		temp = search_tokens(&temp, PIPE);
+		temp = search_tokens(&temp, UNKNOWN);
+		temp->type = COMMAND;
+	}
+	while (search_tokens(token, UNKNOWN))
+	{
+		temp = search_tokens(token, UNKNOWN);
+		temp->type = ARGS;
+	}
+}
 
-void	asd()
+static void	save_env(t_env **ll, char **env)
+{
+	int	i;
 
-int	main(int ac, char **av, char **env)
+	i = 0;
+	while (env[i])
+	{
+		append_node(ll, env[i]);
+		i++;
+	}
+}
+
+int	main(int ac, char **av, char **envp)
 {
 	t_token	*token;
 	t_data	data;
+	t_env	*env;
 
 	(void)ac;
 	(void)av;
-	(void)env;
+	env = NULL;
 	token = NULL;
+	save_env(&env, envp);
 	data.tokens = token;
 	data.env_paths = ft_split(getenv("PATH"), ':');
 	printf(CYAN "\n\n\t\tHello Malaka\n\n");
@@ -93,9 +96,15 @@ int	main(int ac, char **av, char **env)
 			add_history(data.input);
 		if (!ft_strncmp(data.input, "exit", 5))	//TODO NEEDS to BE strcmp
 			close_pros(&data);
+		if (!ft_strncmp(data.input, "print env", 9))
+			print_linked(&env);
 		lexer(data.input, &token);
 		print_tokens(&token);
-		//try_to_exec(&data, &token, env);
+		classify_tokens(&token);
+		print_tokens(&token);
+		expansion(&token);
+		print_tokens(&token);
+		try_to_exec(&data, &token, envp);
 		free_linked(token);
 		token = NULL;
 		free (data.input);

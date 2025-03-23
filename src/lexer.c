@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/22 17:37:13 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/23 17:45:42 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ void	lexer(char *input, t_token **token)
 			i++;
 			continue ;
 		}
-		if (ft_isalpha(input[i]))
+		if (ft_isalnum(input[i]))
 		{
 			pos = 0;
-			while (ft_isalpha(input[i]) || input[i] == '/')
+			while (ft_isalnum(input[i]) || input[i] == '/')
 				buffer[pos++] = input[i++];
 			buffer[pos] = '\0';
-			append(token, buffer, UNKNOWN);
+			append_token(token, buffer, UNKNOWN);
 		}
 		else if (input[i] == '"')
 		{
@@ -47,7 +47,7 @@ void	lexer(char *input, t_token **token)
 			}
 			else
 				buffer[pos] = '\0';
-			append(token, buffer, DOUBLE_QUOTES);
+			append_token(token, buffer, DOUBLE_QUOTES);
 		}
 		else if (input[i] == 39)
 		{
@@ -62,7 +62,7 @@ void	lexer(char *input, t_token **token)
 			}
 			else
 				buffer[pos] = '\0';
-			append(token, buffer, SINGLE_QUOTES);
+			append_token(token, buffer, SINGLE_QUOTES);
 		}
 		else if (input[i] == '-')
 		{
@@ -71,7 +71,7 @@ void	lexer(char *input, t_token **token)
 			while (input[i] && ft_isalpha(input[i]))
 				buffer[pos++] = input[i++];
 			buffer[pos] = '\0';
-			append(token, buffer, ARGS);
+			append_token(token, buffer, ARGS);
 		}
 		else if (input[i] == '|' && input[i + 1] != '|')
 		{
@@ -80,16 +80,28 @@ void	lexer(char *input, t_token **token)
 			if (input[i] == input[i - 1])
 				buffer[pos++] = input [i++];
 			buffer[pos] = '\0';
-			append(token, buffer, PIPE);
+			append_token(token, buffer, PIPE);
 		}
 		else if (input[i] == '<')
 		{
-			append(token, "<", REDIRECT_INP);
+			if (input[i + 1] == '<')
+			{
+				append_token(token, "<<", HERE_DOC);
+				i++;
+			}
+			else
+				append_token(token, "<", REDIRECT_INP);
 			i++;
 		}
 		else if (input[i] == '>')
 		{
-			append(token, ">", REDIRECT_OUT);
+			if (input[i + 1] == '>')
+			{
+				append_token(token, ">>", APPEND);
+				i++;
+			}
+			else
+				append_token(token, ">", REDIRECT_OUT);
 			i++;
 		}
 		else
