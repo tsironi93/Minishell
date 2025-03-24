@@ -6,17 +6,101 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/23 17:45:42 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/24 19:32:02 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+static void	bullshit(t_token **token, int *i, char *input)
+{
+	if (input[*i] == '|' && input[*i + 1] != '|')
+	{
+		append_token(token, "|", PIPE);
+		(*i)++;
+	}
+	else if (input[*i] == '<')
+	{
+		if (input[++(*i)] == '<')
+		{
+			append_token(token, "<<", HERE_DOC);
+			(*i)++;
+		}
+		else
+			append_token(token, "<", REDIRECT_INP);
+	}
+	else if (input[*i] == '>')
+	{
+		if (input[++(*i)] == '>')
+		{
+			append_token(token, ">>", APPEND);
+			(*i)++;
+		}
+		else
+			append_token(token, ">", REDIRECT_OUT);
+	}
+}
+
+static char	*wraper_sign(char *input, int *i)
+{
+	int		pos;
+	char	buffer[256];
+
+	pos = 0;
+	buffer[pos++] = input[(*i)++];
+	while (input[(*i)] && ft_isalpha(input[(*i)]))
+		buffer[pos++] = input[(*i)++];
+	buffer[pos] = '\0';
+	return (ft_strdup(buffer));
+}
+
+static char	*wraper_quotes(char *input, int *i, char c)
+{
+	char	buffer[256];
+	int		pos;
+
+	pos = 0;
+	while (input[++(*i)] && input[*i] != c)
+		buffer[pos++] = input[*i];
+	buffer[pos] = '\0';
+	(*i)++;
+	return (ft_strdup(buffer));
+}
+
+static void	bullshit2(t_token **token, int *i, char *input)
+{
+	char	*buf;
+
+	if (ft_isalnum(input[*i]))
+	{
+		buf = wraper_sign(input, i);
+		append_token(token, buf, UNKNOWN);
+	}
+	else if (input[*i] == '"')
+	{
+		buf = wraper_quotes(input, i, '\"');
+		append_token(token, buf, DOUBLE_QUOTES);
+	}
+	else if (input[*i] == '$')
+	{
+		buf = wraper_sign(input, i);
+		append_token(token, buf, EXPAND);
+	}
+	else if (input[*i] == 39)
+	{
+		buf = wraper_quotes(input, i, 39);
+		append_token(token, buf, SINGLE_QUOTES);
+	}
+	else if (input[*i] == '-')
+	{
+		buf = wraper_sign(input, i);
+		append_token(token, buf, ARGS);
+	}
+}
+
 void	lexer(char *input, t_token **token)
 {
 	int		i;
-	char	buffer[256];
-	int		pos;
 
 	i = 0;
 	while (input[i])
@@ -26,84 +110,37 @@ void	lexer(char *input, t_token **token)
 			i++;
 			continue ;
 		}
-		if (ft_isalnum(input[i]))
+		else if (ft_isalnum(input[i]) || input[i] == '"' || input[i] == '$'
+			|| input[i] == 39 || input[i] == '-')
+			bullshit2(token, &i, input);
+/*		if (ft_isalnum(input[i]))
 		{
-			pos = 0;
-			while (ft_isalnum(input[i]) || input[i] == '/')
-				buffer[pos++] = input[i++];
-			buffer[pos] = '\0';
-			append_token(token, buffer, UNKNOWN);
+			buf = wraper_sign(input, &i);
+			append_token(token, buf, UNKNOWN);
 		}
 		else if (input[i] == '"')
 		{
-			pos = 0;
-			buffer[pos++] = input[i++];
-			while (input[i] && input[i] != '"')
-				buffer[pos++] = input[i++];
-			if (input[i] == '"')
-			{
-				buffer[pos] = input[i++];
-				buffer[pos + 1] = '\0';
-			}
-			else
-				buffer[pos] = '\0';
-			append_token(token, buffer, DOUBLE_QUOTES);
+			buf = wraper_quotes(input, &i, '\"');
+			append_token(token, buf, DOUBLE_QUOTES);
+		}
+		else if (input[i] == '$')
+		{
+			buf = wraper_sign(input, &i);
+			append_token(token, buf, EXPAND);
 		}
 		else if (input[i] == 39)
 		{
-			pos = 0;
-			buffer[pos++] = input[i++];
-			while (input[i] && input[i] != 39)
-				buffer[pos++] = input[i++];
-			if (input[i] == 39)
-			{
-				buffer[pos] = input[i++];
-				buffer[pos + 1] = '\0';
-			}
-			else
-				buffer[pos] = '\0';
-			append_token(token, buffer, SINGLE_QUOTES);
+			buf = wraper_quotes(input, &i, 39);
+			append_token(token, buf, SINGLE_QUOTES);
 		}
 		else if (input[i] == '-')
 		{
-			pos = 0;
-			buffer[pos++] = input[i++];
-			while (input[i] && ft_isalpha(input[i]))
-				buffer[pos++] = input[i++];
-			buffer[pos] = '\0';
-			append_token(token, buffer, ARGS);
-		}
-		else if (input[i] == '|' && input[i + 1] != '|')
-		{
-			pos = 0;
-			buffer[pos++] = input [i++];
-			if (input[i] == input[i - 1])
-				buffer[pos++] = input [i++];
-			buffer[pos] = '\0';
-			append_token(token, buffer, PIPE);
-		}
-		else if (input[i] == '<')
-		{
-			if (input[i + 1] == '<')
-			{
-				append_token(token, "<<", HERE_DOC);
-				i++;
-			}
-			else
-				append_token(token, "<", REDIRECT_INP);
-			i++;
-		}
-		else if (input[i] == '>')
-		{
-			if (input[i + 1] == '>')
-			{
-				append_token(token, ">>", APPEND);
-				i++;
-			}
-			else
-				append_token(token, ">", REDIRECT_OUT);
-			i++;
-		}
+			buf = wraper_sign(input, &i);
+			append_token(token, buf, ARGS);
+		}*/
+		else if ((input[i] == '|' && input[i + 1] != '|') || input[i] == '>'
+			|| input[i] == '<')
+			bullshit(token, &i, input);
 		else
 		{
 			printf("Sorry cant handle this!");

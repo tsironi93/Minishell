@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/23 14:53:38 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/24 08:18:30 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,6 @@ void	try_to_exec(t_data *data, t_token **token, char **env)
 	}
 	waitpid(pid, NULL, 0);
 	free2d(cmd);
+	free(cmd_path);
 	cmd = NULL;
 }

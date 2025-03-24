@@ -17,6 +17,7 @@ const char *get_token_type(t_token_type type) {
 		case APPEND					:return "APPEND";
 		case APPEND_FILENAME_OUT	:return "APPEND_FILENAME_OUT";
 		case HERE_DOC_OPT			:return "HERE_DOC_OPT";
+		case EXPAND					:return "EXPAND";
 		default				:return "UNKNOWN_TOKEN";
 
 	}
@@ -52,4 +53,12 @@ void	print_linked(t_env **ll)
 		printf("%s\n", temp->str);
 		temp = temp->next;
 	}
+}
+
+void check_leaks(void)
+{
+    printf("\nChecking for memory leaks...\n");
+    char command[256];
+    sprintf(command, "leaks %d", getpid());
+    system(command);
 }

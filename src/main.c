@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/23 18:03:11 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/24 19:38:58 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,24 +67,19 @@ static void	save_env(t_env **ll, char **env)
 
 	i = 0;
 	while (env[i])
-	{
-		append_node(ll, env[i]);
-		i++;
-	}
+		append_node(ll, env[i++]);
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	t_token	*token;
 	t_data	data;
-	t_env	*env;
 
+	atexit(check_leaks);
 	(void)ac;
 	(void)av;
-	env = NULL;
-	token = NULL;
-	save_env(&env, envp);
-	data.tokens = token;
+	data.env = NULL;
+	data.tokens = NULL;
+	save_env(&data.env, envp);
 	data.env_paths = ft_split(getenv("PATH"), ':');
 	printf(CYAN "\n\n\t\tHello Malaka\n\n");
 	while (1)
@@ -97,16 +92,16 @@ int	main(int ac, char **av, char **envp)
 		if (!ft_strncmp(data.input, "exit", 5))	//TODO NEEDS to BE strcmp
 			close_pros(&data);
 		if (!ft_strncmp(data.input, "print env", 9))
-			print_linked(&env);
-		lexer(data.input, &token);
-		print_tokens(&token);
-		classify_tokens(&token);
-		print_tokens(&token);
-		expansion(&token);
-		print_tokens(&token);
-		try_to_exec(&data, &token, envp);
-		free_linked(token);
-		token = NULL;
+			print_linked(&data.env);
+		lexer(data.input, &data.tokens);
+		print_tokens(&data.tokens);
+		//classify_tokens(&data.tokens);
+		//print_tokens(&data.tokens);
+		//expansion(&data.tokens, &data.env);
+		//print_tokens(&data.tokens);
+		//try_to_exec(&data, &data.tokens, envp);
+		free_linked(data.tokens);
+		data.tokens = NULL;
 		free (data.input);
 	}
 	exit(EXIT_SUCCESS);
