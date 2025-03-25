@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/24 16:10:12 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/25 18:54:24 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,80 +22,61 @@ char	*_get_path(t_env **envp, char *exp)
 	{
 		path = ft_strnstr(temp->str, exp, ft_strlen(exp));
 		if (path != NULL)
-			break ;
+			return (path + 5);
 		temp = temp->next;
 	}
-	return (path + 5);
-}
-
-static char	*expand(char *str, t_env **env)
-{
-	int		i;
-	char	*pos;
-	char	buffer[256];
-	char	*exp;
-
-	i = 0;
-	if (!str)
-		return (NULL);
-	pos = ft_strchr(str, '$');
-	pos++;
-	while (*pos != '\0' && !ft_isspace(*pos) && *pos != '"')
-		buffer[i++] = *pos++;
-	buffer[i++] = '=';
-	buffer[i] = '\0';
-	exp = _get_path(env, buffer);
-	return (exp);
+	return ("");
 }
 
 char	*prepare_exp(t_env **env, char *str)
 {
-	char	buffer_bef[256];
-	char	buffer_aft[256];
-	char	buffer_exp[256];
+	char	buffer[256];
 	int		i;
 	int		pos;
+	char	*arg;
+	char	*res;
 
-	pos = 0;
+	res = ft_strdup("");
 	i = 0;
-	while (str[i] && str[i] != '$')
-		buffer_bef[pos++] = str[i++];
-	(void)buffer_aft;
-	(void)buffer_exp;
-	(void)env;
-	return (str);
+	while (str[i])
+	{
+		pos = 0;
+		while (str[i] && str[i] != '$')
+			buffer[pos++] = str[i++];
+		buffer[pos] = '\0';
+		res = ft_strjoin(res, buffer);
+		pos = 0;
+		while (!ft_isspace(str[++i]) && str[i])
+			buffer[pos++] = str[i];
+		buffer[pos] = '\0';
+		arg = _get_path(env, buffer);
+		res = ft_strjoin(res, arg);
+	}
+	return (res);
 }
 
 void	expansion(t_token **token, t_env **env)
 {
 	t_token	*temp;
-	char	*tmp;
+	char	*str;
 
 	temp = *token;
-	while (search_tokens(&temp, SINGLE_QUOTES))
+	while (temp)
 	{
-		temp = search_tokens(&temp, SINGLE_QUOTES);
-		temp->type = ARGS;
-	}
-	temp = *token;
-	while (search_tokens(&temp, DOUBLE_QUOTES))
-	{
-		temp = search_tokens(&temp, DOUBLE_QUOTES);
-		if (ft_strchr(temp->value, '$'))
+		if (temp->type == COMMAND || temp->type == DOUBLE_QUOTES
+			|| temp->type == ARGS)
 		{
-			tmp = expand(temp->value, env);
-			free(temp->value);
-			temp->value = ft_strdup(tmp);
+			if (ft_strchr(temp->value, '$'))
+			{
+				str = prepare_exp(env, temp->value);
+				free (temp->value);
+				temp->value = str;
+				if (temp->type == DOUBLE_QUOTES)
+					temp->type = ARGS;
+			}
 		}
-		temp->type = ARGS;
-	}
-	temp = *token;
-	while (search_tokens(&temp, EXPAND))
-	{
-		temp = search_tokens(&temp, EXPAND);
-		tmp = expand(temp->value, env);
-		free(temp->value);
-		temp->value = ft_strdup(tmp);
-		temp->type = ARGS;
+		if (temp->type == SINGLE_QUOTES)
+			temp->type = ARGS;
+		temp = temp->next;
 	}
 }

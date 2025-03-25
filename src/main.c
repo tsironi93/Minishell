@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/25 13:29:33 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/25 19:04:43 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	main(int ac, char **av, char **envp)
 		if (classify_tokens(&data.tokens))
 		{
 			print_tokens(&data.tokens);
-			//expansion(&data.tokens, &data.env);
-			//print_tokens(&data.tokens);
+			expansion(&data.tokens, &data.env);
+			print_tokens(&data.tokens);
 			//try_to_exec(&data, &data.tokens, envp);
 		}
 		free_linked(data.tokens);
