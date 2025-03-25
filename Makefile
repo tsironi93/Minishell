@@ -5,7 +5,7 @@ BONUS_NAME	= 	_bonus
 HEADER	=	minishell.h
 
 CC		=	cc
-CFLAGS	=	-Wall -Wextra -Werror -O2 -g #-fsanitize=address -fno-omit-frame-pointer
+CFLAGS	=	-Wall -Wextra -Werror -O2 -g -fsanitize=address -fno-omit-frame-pointer
 
 # Libft directory
 LIBFT_DIR	=	./libft

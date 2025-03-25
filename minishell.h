@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/24 09:18:51 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/25 13:13:10 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ t_token	*search_tokens(t_token **token, t_token_type type);
 
 void	lexer(char *input, t_token **token);
 void	expansion(t_token **token, t_env **env);
+bool	classify_tokens(t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
