@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/26 11:08:07 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 13:37:51 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	try_to_exec(t_data *data, t_token **token, char **env)
 	t_token			*temp;
 	char			**cmd;
 	char			*cmd_path;
-	int				pid;
+	//int				pid;
 	unsigned int	i;
 
 	i = 0;
@@ -67,18 +67,20 @@ void	try_to_exec(t_data *data, t_token **token, char **env)
 	cmd[i++] = ft_strdup(temp->value);
 	while (temp)
 	{
+		if (temp->type == PIPE)
+			break ;
 		if (temp->type == ARGS)
 			cmd[i++] = ft_strdup(temp->value);
 		temp = temp->next;
 	}
 	cmd[i] = NULL;
-	pid = fork();
-	if (pid == 0)
-	{
+	//pid = fork();
+	//if (pid == 0)
+	//{
 		execve(cmd_path, cmd, env);
 		printf("execve failed");
-	}
-	waitpid(pid, NULL, 0);
+	//}
+	//waitpid(pid, NULL, 0);
 	free2d(cmd);
 	free(cmd_path);
 	cmd = NULL;

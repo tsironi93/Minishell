@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:14:37 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/24 08:57:54 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 16:19:11 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,23 @@ void	free_linked(t_token *head)
 	}
 }
 
-void	close_pros(t_data *data)
+size_t	num_of_type(t_token **token, t_token_type type)
 {
-	free_linked(data->tokens);
-	free (data->input);
-	exit (EXIT_SUCCESS);
+	int		i;
+	t_token	*temp;
+
+	i = 0;
+	temp = *token;
+	while (temp)
+	{
+		if (temp->type == type)
+			i++;
+		temp = temp->next;
+	}
+	return (i);
 }
 
-static t_token	*_create_token(char *value, t_token_type type)
+static	t_token	*_create_token(char *value, t_token_type type)
 {
 	t_token	*new_token;
 

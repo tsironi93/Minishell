@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/25 13:13:10 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 16:55:05 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,13 +91,13 @@ int		ft_isspace(int c);
 
 void	free_linked(t_token *head);
 void	free2d(char **a);
-void	close_pros(t_data *data);
 
 //------------------------LINKED LIST FUNCTIONS-------------------------//
 
 void	append_node(t_env **head, char *value);
 void	append_token(t_token **head, char *value, t_token_type type);
 t_token	*search_tokens(t_token **token, t_token_type type);
+size_t	num_of_type(t_token **token, t_token_type type);
 
 //------------------------------INIT------------------------------------//
 
@@ -107,6 +107,7 @@ bool	classify_tokens(t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
+void	asd(t_token **token, t_data *data, size_t num);
 void	try_to_exec(t_data *data, t_token **token, char **env);
 
 //--------------------------TESTING_BENCH-------------------------------//

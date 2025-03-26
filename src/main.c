@@ -6,11 +6,20 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/26 10:10:45 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 16:56:53 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	clean(t_data *data, bool flag)
+{
+	free_linked(data->tokens);
+	data->tokens = NULL;
+	free (data->input);
+	if (flag)
+		exit (EXIT_SUCCESS);
+}
 
 static void	init(int ac, char **av, char **envp, t_data *data)
 {
@@ -33,7 +42,7 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 
 	init(ac, av, envp, &data);
-	while (1)
+	while ("Malaka")
 	{
 		data.input = readline("~>:");
 		if (!data.input)
@@ -41,21 +50,24 @@ int	main(int ac, char **av, char **envp)
 		if (*data.input)
 			add_history(data.input);
 		if (!ft_strcmp(data.input, "exit"))
-			close_pros(&data);
+			clean(&data, true);
 		if (!ft_strcmp(data.input, "print env"))
 			print_linked(&data.env);
 		lexer(data.input, &data.tokens);
 		//print_tokens(&data.tokens);
-		if (classify_tokens(&data.tokens))
+		if (!classify_tokens(&data.tokens))
 		{
-			//print_tokens(&data.tokens);
-			expansion(&data.tokens, &data.env);
-			//print_tokens(&data.tokens);
-			try_to_exec(&data, &data.tokens, envp);
+			clean(&data, false);
+			continue ;
 		}
-		free_linked(data.tokens);
-		data.tokens = NULL;
-		free (data.input);
+		//print_tokens(&data.tokens);
+		expansion(&data.tokens, &data.env);
+		//print_tokens(&data.tokens);
+		if (num_of_type(&data.tokens, PIPE))
+			asd(&data.tokens, &data, num_of_type(&data.tokens, PIPE));
+		else
+			try_to_exec(&data, &data.tokens, envp);
+		clean(&data, false);
 	}
 	exit(EXIT_SUCCESS);
 }
