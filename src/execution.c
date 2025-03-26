@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/24 08:18:30 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 11:08:07 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ void	try_to_exec(t_data *data, t_token **token, char **env)
 	cmd_path = _find_exec(temp->value, data->env_paths);
 	if (!cmd_path)
 		return ;
-	cmd = (char **)malloc((_num_of_args(token , ARGS) + 2) * sizeof(char *));
+	cmd = (char **)malloc((_num_of_args(token, ARGS) + 2) * sizeof(char *));
 	cmd[i++] = ft_strdup(temp->value);
 	while (temp)
 	{

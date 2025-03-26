@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/25 18:42:57 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 10:19:12 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*wraper_sign(char *input, int *i)
 
 	pos = 0;
 	buffer[pos++] = input[(*i)++];
-	while (input[(*i)] && (ft_isalpha(input[(*i)]) || input[(*i)] == '$'))
+	while (input[(*i)] && (ft_isalnum(input[(*i)]) || input[(*i)] == '$'))
 		buffer[pos++] = input[(*i)++];
 	buffer[pos] = '\0';
 	return (ft_strdup(buffer));
@@ -116,6 +116,6 @@ void	lexer(char *input, t_token **token)
 			|| input[i] == '<')
 			bullshit(token, &i, input);
 		else
-			return ((void)printf("Sorry cant handle this!"));
+			return ((void)printf("Sorry cant handle this!\n"));
 	}
 }

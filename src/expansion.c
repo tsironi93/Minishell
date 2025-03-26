@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/25 18:54:24 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/26 10:20:12 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,12 @@ char	*_get_path(t_env **envp, char *exp)
 	t_env	*temp;
 
 	temp = *envp;
+	path = NULL;
 	while (temp)
 	{
-		path = ft_strnstr(temp->str, exp, ft_strlen(exp));
+		if (ft_strnstr(temp->str, exp, ft_strlen(exp))
+			&& temp->str[ft_strlen(exp) + 1 == '='])
+			path = ft_strnstr(temp->str, exp, ft_strlen(exp));
 		if (path != NULL)
 			return (path + 5);
 		temp = temp->next;
@@ -44,13 +47,13 @@ char	*prepare_exp(t_env **env, char *str)
 		while (str[i] && str[i] != '$')
 			buffer[pos++] = str[i++];
 		buffer[pos] = '\0';
-		res = ft_strjoin(res, buffer);
+		ft_strlcat(res + ft_strlen(res), buffer, pos + 1);
 		pos = 0;
 		while (!ft_isspace(str[++i]) && str[i])
 			buffer[pos++] = str[i];
 		buffer[pos] = '\0';
 		arg = _get_path(env, buffer);
-		res = ft_strjoin(res, arg);
+		ft_strlcat(res + ft_strlen(res), arg, ft_strlen(arg) + 1);
 	}
 	return (res);
 }
