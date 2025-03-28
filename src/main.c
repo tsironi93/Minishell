@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/26 16:56:53 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/28 19:59:48 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ int	main(int ac, char **av, char **envp)
 	t_data	data;
 
 	init(ac, av, envp, &data);
-	while ("Malaka")
+	while (1)
 	{
 		data.input = readline("~>:");
 		if (!data.input)
@@ -54,17 +54,17 @@ int	main(int ac, char **av, char **envp)
 		if (!ft_strcmp(data.input, "print env"))
 			print_linked(&data.env);
 		lexer(data.input, &data.tokens);
-		//print_tokens(&data.tokens);
+		print_tokens(&data.tokens);
 		if (!classify_tokens(&data.tokens))
 		{
 			clean(&data, false);
 			continue ;
 		}
-		//print_tokens(&data.tokens);
+		print_tokens(&data.tokens);
 		expansion(&data.tokens, &data.env);
 		//print_tokens(&data.tokens);
 		if (num_of_type(&data.tokens, PIPE))
-			asd(&data.tokens, &data, num_of_type(&data.tokens, PIPE));
+			handle_pipeline(&data.tokens, &data, num_of_type(&data.tokens, PIPE));
 		else
 			try_to_exec(&data, &data.tokens, envp);
 		clean(&data, false);

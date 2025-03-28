@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/26 16:55:05 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/28 20:00:10 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ bool	classify_tokens(t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
-void	asd(t_token **token, t_data *data, size_t num);
+void handle_pipeline(t_token **token, t_data *data, int num_pipes);
 void	try_to_exec(t_data *data, t_token **token, char **env);
 
 //--------------------------TESTING_BENCH-------------------------------//
