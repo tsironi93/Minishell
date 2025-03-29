@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/28 14:33:51 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/29 08:28:16 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,35 @@ static unsigned int	_num_of_args(t_token **token, t_token_type type)
 	return (i);
 }
 
-void	try_to_exec(t_data *data, t_token **token, char **env)
+static void	do_i_fork(t_data *data, char **cmd, char *cmd_path)
+{
+	int	pid;
+
+	if (!(num_of_type(&data->tokens, COMMAND) == 1))
+	{
+		execve(cmd_path, cmd, data->env_paths);
+		printf("execve failed");
+	}
+	else
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			execve(cmd_path, cmd, data->env_paths);
+			printf("execve failed");
+		}
+		waitpid(pid, NULL, 0);
+	}
+	free2d(cmd);
+	free(cmd_path);
+	cmd = NULL;
+}
+
+void	try_to_exec(t_data *data, t_token **token)
 {
 	t_token			*temp;
 	char			**cmd;
 	char			*cmd_path;
-	//int				pid;
 	unsigned int	i;
 
 	i = 0;
@@ -74,14 +97,5 @@ void	try_to_exec(t_data *data, t_token **token, char **env)
 		temp = temp->next;
 	}
 	cmd[i] = NULL;
-	//pid = fork();
-	//if (pid == 0)
-	//{
-		execve(cmd_path, cmd, env);
-		printf("execve failed");
-	//}
-	//waitpid(pid, NULL, 0);
-	free2d(cmd);
-	free(cmd_path);
-	cmd = NULL;
+	do_i_fork(data, cmd, cmd_path);
 }
