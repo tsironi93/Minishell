@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/29 08:27:25 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/30 15:26:09 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,16 +79,22 @@ typedef struct s_data
 {
 	t_token	*tokens;
 	char	*input;
+	char	**env_full;
 	char	**env_paths;
 	t_env	*env;
+	int		*input_fd;
+	int		*output_fd;
+	int		*append_fd;
 }		t_data;
 
 //-------------------------------UTILS----------------------------------//
 
 int		ft_isspace(int c);
+void	clean(t_data *data, bool exit_);
 
 //-----------------------------FREE/ERROR-------------------------------//
 
+void	free_env(t_env **head);
 void	free_linked(t_token *head);
 void	free2d(char **a);
 
@@ -108,6 +114,7 @@ bool	classify_tokens(t_token **token);
 //----------------------------EXECUTION---------------------------------//
 
 void	handle_pipeline(t_data *data, int num_pipes);
+void	redirections(t_data *data, t_token **token);
 void	try_to_exec(t_data *data, t_token **token);
 
 //--------------------------TESTING_BENCH-------------------------------//

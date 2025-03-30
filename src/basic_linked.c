@@ -6,11 +6,24 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:26:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/23 17:59:39 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/29 17:01:41 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+void	free_env(t_env **head)
+{
+	t_env	*temp;
+
+	while (*head)
+	{
+		temp = *head;
+		*head = (*head)->next;
+		free (temp->str);
+		free (temp);
+	}
+}
 
 static t_env	*_create_node(char *value)
 {

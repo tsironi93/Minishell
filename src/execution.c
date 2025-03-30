@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/29 08:28:16 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/30 17:24:19 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,15 @@ static unsigned int	_num_of_args(t_token **token, t_token_type type)
 	return (i);
 }
 
-static void	do_i_fork(t_data *data, char **cmd, char *cmd_path)
+static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 {
 	int	pid;
+	int	i;
 
-	if (!(num_of_type(&data->tokens, COMMAND) == 1))
+	if (num_of_type(&data->tokens, COMMAND) != 1)
 	{
-		execve(cmd_path, cmd, data->env_paths);
+		redirections(data, token);
+		execve(cmd_path, cmd, data->env_full);
 		printf("execve failed");
 	}
 	else
@@ -61,9 +63,11 @@ static void	do_i_fork(t_data *data, char **cmd, char *cmd_path)
 		pid = fork();
 		if (pid == 0)
 		{
-			execve(cmd_path, cmd, data->env_paths);
+			redirections(data, token);
+			execve(cmd_path, cmd, data->env_full);
 			printf("execve failed");
 		}
+		i = -1;
 		waitpid(pid, NULL, 0);
 	}
 	free2d(cmd);
@@ -97,5 +101,5 @@ void	try_to_exec(t_data *data, t_token **token)
 		temp = temp->next;
 	}
 	cmd[i] = NULL;
-	do_i_fork(data, cmd, cmd_path);
+	do_i_fork(data, token, cmd, cmd_path);
 }
