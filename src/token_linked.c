@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:14:37 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/28 18:56:26 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/01 10:13:31 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	free_linked(t_token *head)
 	}
 }
 
-size_t	num_of_type(t_token **token, t_token_type type)
+int	num_of_type(t_token **token, t_token_type type, t_token_type until)
 {
 	int		i;
 	t_token	*temp;
@@ -34,7 +34,7 @@ size_t	num_of_type(t_token **token, t_token_type type)
 	temp = *token;
 	while (temp)
 	{
-		if (temp->type == type)
+		if (temp->type == type && temp->type != until)
 			i++;
 		temp = temp->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:26:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/29 17:01:41 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/03/31 10:24:37 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static t_env	*_create_node(char *value)
 {
 	t_env	*head;
 
-	head = (t_env *)malloc(sizeof(t_env));
+	head = malloc(sizeof(t_env));
 	if (!head)
 		return (NULL);
 	head->str = ft_strdup(value);

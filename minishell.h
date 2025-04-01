@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/30 15:26:09 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/01 14:19:10 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ typedef enum token_type
 	APPEND_FILENAME_OUT,
 	HERE_DOC_OPT,
 	APPEND,
-	EXPAND
+	EXPAND,
+	COMMAND_EX,
+	NULLL
 }	t_token_type;
 
 typedef struct s_env
@@ -80,7 +82,7 @@ typedef struct s_data
 	t_token	*tokens;
 	char	*input;
 	char	**env_full;
-	char	**env_paths;
+	char	**env_cmd_paths;
 	t_env	*env;
 	int		*input_fd;
 	int		*output_fd;
@@ -91,28 +93,33 @@ typedef struct s_data
 
 int		ft_isspace(int c);
 void	clean(t_data *data, bool exit_);
+void	go_at_start(t_token **token);
+bool	check_files(t_token **token);
+char	*trim_to_del(char *str, char del);
 
 //-----------------------------FREE/ERROR-------------------------------//
 
 void	free_env(t_env **head);
 void	free_linked(t_token *head);
 void	free2d(char **a);
+void	free_fds(t_data *data);
 
 //------------------------LINKED LIST FUNCTIONS-------------------------//
 
 void	append_node(t_env **head, char *value);
 void	append_token(t_token **head, char *value, t_token_type type);
 t_token	*search_tokens(t_token **token, t_token_type type);
-size_t	num_of_type(t_token **token, t_token_type type);
+int		num_of_type(t_token **token, t_token_type type, t_token_type until);
 
 //------------------------------INIT------------------------------------//
 
 void	lexer(char *input, t_token **token);
-void	expansion(t_token **token, t_env **env);
+void	expansion(t_token **token, t_data *data);
 bool	classify_tokens(t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
+bool	setup_fds(t_data *data, t_token **token);
 void	handle_pipeline(t_data *data, int num_pipes);
 void	redirections(t_data *data, t_token **token);
 void	try_to_exec(t_data *data, t_token **token);

@@ -18,6 +18,7 @@ const char *get_token_type(t_token_type type) {
 		case APPEND_FILENAME_OUT	:return "APPEND_FILENAME_OUT";
 		case HERE_DOC_OPT			:return "HERE_DOC_OPT";
 		case EXPAND					:return "EXPAND";
+		case COMMAND_EX				:return "COMMAND EXPANSION";
 		default				:return "UNKNOWN_TOKEN";
 
 	}
