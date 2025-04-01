@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:14:37 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 10:13:31 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:43:29 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,14 @@ void	free_linked(t_token *head)
 {
 	t_token	*temp;
 
+	if (!head)
+		return ;
 	while (head)
 	{
 		temp = head;
 		head = head->next;
-		free (temp->value);
+		if (!temp->value)
+			free (temp->value);
 		free (temp);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 14:51:05 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/01 16:45:13 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ int	main(int ac, char **av, char **envp)
 	init(ac, av, envp, &data);
 	while ("Malaka")
 	{
+		clean(&data, false);
 		data.input = readline("~>:");
 		if (!data.input)
 			break ;
@@ -52,23 +53,16 @@ int	main(int ac, char **av, char **envp)
 		lexer(data.input, &data.tokens);
 //		print_tokens(&data.tokens);
 		if (!classify_tokens(&data.tokens))
-		{
-			clean(&data, false);
 			continue ;
-		}
 //		print_tokens(&data.tokens);
 		expansion(&data.tokens, &data);
 //		print_tokens(&data.tokens);
 		if (!check_files(&data.tokens))
-		{
-			clean(&data, false);
 			continue ;
-		}
 		if (num_of_type(&data.tokens, PIPE, NULLL))
 			handle_pipeline(&data, num_of_type(&data.tokens, PIPE, NULLL));
 		else
 			try_to_exec(&data, &data.tokens);
-		clean(&data, false);
 	}
 	exit(EXIT_SUCCESS);
 }
