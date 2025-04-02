@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:36:48 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/29 09:05:52 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/02 18:15:16 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ static void	redirect_pipe(int fd[][2], int num_pipes, int p_index, t_data *data)
 		dup2(fd[p_index][1], STDOUT_FILENO);
 		close(fd[p_index][1]);
 	}
-	i = -1;
 	close_fds(fd, num_pipes);
 	try_to_exec(data, &temp);
 }

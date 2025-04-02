@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 16:45:13 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/02 15:45:41 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	init(int ac, char **av, char **envp, t_data *data)
 	int	i;
 
 	i = 0;
-	atexit(check_leaks);
+//	atexit(check_leaks);
 	(void)ac;
 	(void)av;
 	data->env = NULL;

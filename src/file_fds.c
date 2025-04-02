@@ -6,51 +6,72 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/02 12:46:13 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/02 17:15:47 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-/*
-	if (type == HERE_DOC)
+static void	heredoc(char *del, int fd)
+{
+	char	*line;
+
+	while ("Grapse Malaka")
 	{
-		cur = *token;
-		i = -1;
-		while (cur && cur->type != PIPE)
+		line = readline("MalakaDoc> ");
+		if (!line)
+			break ;
+		if (!ft_strcmp(line, del))
 		{
-			if (cur->type == HERE_DOC_OPT)
-			{
-				redirect_fd[++i] = open(".heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-				if (redirect_fd[i] < 0)
-					return (perror("file didnt open"), false);
-				break ;
-			}
+			free (line);
+			break ;
 		}
-		p();
-		char *heredoc_inp = NULL;
-		heredoc_inp = readline("> ");
-		printf("heredoc input '%s'\n", heredoc_inp);
-		while (!ft_strcmp(heredoc_inp, cur->value))
-		{
-			p();
-			free(heredoc_inp);
-			heredoc_inp = readline("> ");
-			printf("heredoc input '%s'\n", heredoc_inp);
-		}
-		p();
-		close (redirect_fd[i]);
-		return (false);
-//			cur = cur->next;
-//			i = -1;
-//			while (++i < num_redirects)
-//			{
-//				dup2(redirect_fd[i], STDIN_FILENO);
-//				close(redirect_fd[i]);
-//			}
-
+		ft_putendl_fd(line, fd);
+		free (line);
 	}
+	close (fd);
+	exit(0);
+}
 
+void	heredoc_init(t_data *data, char *del)
+{
+	int		pipe_fd[2];
+	int		pid;
+	char	*args[] = {"cat", NULL};
 
-*/
+	if (pipe(pipe_fd) == -1)
+		return ((void)perror("Pipe error"));
+	pid = fork();
+	if (pid == -1)
+		return ((void)perror("Fork error"));
+	if (pid == 0)
+	{
+		close (pipe_fd[0]);
+		heredoc(del, pipe_fd[1]);
+	}
+	waitpid(pid, NULL, 0);
+	close (pipe_fd[1]);
+	dup2(pipe_fd[0], STDIN_FILENO);
+	close (pipe_fd[0]);
+	execve("/bin/cat", args, data->env_full);
+	perror("Execve failed");
+}
 
+void	check_hedoc(t_data *data, t_token **token)
+{
+	int		num_files;
+	int		i;
+	t_token	*cur;
+
+	num_files = num_of_type(token, HERE_DOC, PIPE);
+	if (num_files < 1)
+		return ;
+	i = -1;
+	cur = *token;
+	while (cur && cur->type != PIPE)
+	{
+		if (cur->type == HERE_DOC_OPT)
+			heredoc_init(data, cur->value);
+		cur = cur->next;
+	}
+}
