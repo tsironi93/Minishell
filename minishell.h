@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 14:19:10 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/02 12:45:53 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_data
 	int		*input_fd;
 	int		*output_fd;
 	int		*append_fd;
+	int		*heredoc_fd;
 }		t_data;
 
 //-------------------------------UTILS----------------------------------//
@@ -119,9 +120,8 @@ bool	classify_tokens(t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
-bool	setup_fds(t_data *data, t_token **token);
 void	handle_pipeline(t_data *data, int num_pipes);
-void	redirections(t_data *data, t_token **token);
+bool	redirections(t_data *data, t_token **token);
 void	try_to_exec(t_data *data, t_token **token);
 
 //--------------------------TESTING_BENCH-------------------------------//
