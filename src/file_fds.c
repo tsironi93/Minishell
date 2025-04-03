@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/02 17:15:47 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/03 14:34:01 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,17 @@ void	check_hedoc(t_data *data, t_token **token)
 		return ;
 	i = -1;
 	cur = *token;
-	while (cur && cur->type != PIPE)
+	while (++i < num_files)
 	{
-		if (cur->type == HERE_DOC_OPT)
-			heredoc_init(data, cur->value);
-		cur = cur->next;
+		while (cur && cur->type != PIPE)
+		{
+			if (cur->type == HERE_DOC_OPT)
+			{
+				heredoc_init(data, cur->value);
+				cur = cur->next;
+				break ;
+			}
+			cur = cur->next;
+		}
 	}
 }

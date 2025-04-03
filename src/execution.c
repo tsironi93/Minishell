@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/02 12:47:01 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/03 12:29:00 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,10 +106,8 @@ void	try_to_exec(t_data *data, t_token **token)
 		return ;
 	cmd = (char **)malloc((_num_of_args(token, ARGS) + 2) * sizeof(char *));
 	cmd[i++] = ft_strdup(temp->value);
-	while (temp)
+	while (temp && temp->type != PIPE)
 	{
-		if (temp->type == PIPE)
-			break ;
 		if (temp->type == ARGS)
 			cmd[i++] = ft_strdup(temp->value);
 		temp = temp->next;

@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 15:54:32 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/02 15:39:51 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/03 12:25:18 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,21 +18,11 @@ static void	redirect_fds(t_token_type type, int *fd, int num_fds)
 
 	i = -1;
 	if (type == FILENAME_OUT || type == APPEND_FILENAME_OUT)
-	{
 		while (++i < num_fds)
-		{
 			dup2(fd[i], STDOUT_FILENO);
-			close(fd[i]);
-		}
-	}
 	else
-	{
 		while (++i < num_fds)
-		{
 			dup2(fd[i], STDIN_FILENO);
-			close(fd[i]);
-		}
-	}
 }
 
 static bool	_open_files(int *ffd, t_token **token, t_token_type type)
@@ -44,9 +34,6 @@ static bool	_open_files(int *ffd, t_token **token, t_token_type type)
 	num_files = num_of_type(token, type, PIPE);
 	if (num_files < 1)
 		return (true);
-	ffd = malloc(num_files * sizeof(int));
-	if (!ffd)
-		return (perror("alloc failed"), false);
 	i = -1;
 	cur = *token;
 	while (cur && cur->type != PIPE)
@@ -70,7 +57,7 @@ bool	redirections(t_data *data, t_token **token)
 	if (!_open_files(data->input_fd, token, FILENAME_INP)
 		|| !_open_files(data->output_fd, token, FILENAME_OUT)
 		|| !_open_files(data->append_fd, token, APPEND_FILENAME_OUT))
-		return (free_fds(data), false);
+		return (false);
 	check_hedoc(data, token);
 	return (true);
 }

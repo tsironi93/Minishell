@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/02 15:45:41 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/03 12:53:29 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ static void	init(int ac, char **av, char **envp, t_data *data)
 	data->tokens = NULL;
 	data->env_full = envp;
 	data->input = NULL;
-	data->input_fd = NULL;
-	data->append_fd = NULL;
-	data->output_fd = NULL;
+//	data->input_fd = NULL;
+//	data->append_fd = NULL;
+//	data->output_fd = NULL;
 	while (envp[i])
 		append_node(&data->env, envp[i++]);
 	data->env_cmd_paths = ft_split(getenv("PATH"), ':');
@@ -41,7 +41,15 @@ int	main(int ac, char **av, char **envp)
 	while ("Malaka")
 	{
 		clean(&data, false);
-		data.input = readline("~>:");
+		if (isatty(fileno(stdin)))
+			data.input = readline("~>:");
+//		else
+//		{
+//			char *line;
+//			line = get_next_line(fileno(stdin));
+//			shell->prompt = ft_strtrim(line, "\n");
+//			free(line);
+//		}
 		if (!data.input)
 			break ;
 		if (*data.input)
@@ -51,12 +59,12 @@ int	main(int ac, char **av, char **envp)
 		if (!ft_strcmp(data.input, "print env"))
 			print_linked(&data.env);
 		lexer(data.input, &data.tokens);
-//		print_tokens(&data.tokens);
+		//print_tokens(&data.tokens);
 		if (!classify_tokens(&data.tokens))
 			continue ;
-//		print_tokens(&data.tokens);
+		//print_tokens(&data.tokens);
 		expansion(&data.tokens, &data);
-//		print_tokens(&data.tokens);
+		//print_tokens(&data.tokens);
 		if (!check_files(&data.tokens))
 			continue ;
 		if (num_of_type(&data.tokens, PIPE, NULLL))

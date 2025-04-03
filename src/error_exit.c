@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 17:03:34 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 16:40:49 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/03 10:59:26 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	clean(t_data *data, bool exit_)
 	}
 }
 
-void	free_fds(t_data *data)
+/*void	free_fds(t_data *data)
 {
 	if (data->input_fd)
 		free(data->input_fd);
@@ -36,4 +36,4 @@ void	free_fds(t_data *data)
 	data->input_fd = NULL;
 	data->output_fd = NULL;
 	data->append_fd = NULL;
-}
+}*/
