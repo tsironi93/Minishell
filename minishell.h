@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/03 10:48:05 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/04 17:17:21 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,17 +77,25 @@ typedef struct s_tocken
 	struct s_tocken	*previous;
 }	t_token;
 
+typedef struct s_heredoc
+{
+	char	**del;
+	int		num;
+	int		*pid;
+	int		**fd;
+}		t_heredoc;
+
 typedef struct s_data
 {
-	t_token	*tokens;
-	char	*input;
-	char	**env_full;
-	char	**env_cmd_paths;
-	t_env	*env;
-	int		input_fd[100];
-	int		output_fd[100];
-	int		append_fd[100];
-	int		*heredoc_fd;
+	t_token		*tokens;
+	char		*input;
+	char		**env_full;
+	char		**env_cmd_paths;
+	t_env		*env;
+	int			input_fd[100];
+	int			output_fd[100];
+	int			append_fd[100];
+	t_heredoc	*heredoc;
 }		t_data;
 
 //-------------------------------UTILS----------------------------------//
@@ -120,7 +128,7 @@ bool	classify_tokens(t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
-void	check_hedoc(t_data *data, t_token **token);
+void	check_heredoc(t_data *data, t_token **token);
 //bool	setup_fds(t_data *data, t_token **token);
 void	handle_pipeline(t_data *data, int num_pipes);
 bool	redirections(t_data *data, t_token **token);

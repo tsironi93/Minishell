@@ -6,22 +6,20 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/03 14:34:01 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/04 17:27:11 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	heredoc(char *del, int fd)
+static void	_heredoc(char *del, int fd)
 {
 	char	*line;
 
 	while ("Grapse Malaka")
 	{
 		line = readline("MalakaDoc> ");
-		if (!line)
-			break ;
-		if (!ft_strcmp(line, del))
+		if (!line || !ft_strcmp(line, del))
 		{
 			free (line);
 			break ;
@@ -33,52 +31,78 @@ static void	heredoc(char *del, int fd)
 	exit(0);
 }
 
-void	heredoc_init(t_data *data, char *del)
+static void	heredoc_final(t_data *data, t_heredoc *heredoc)
 {
-	int		pipe_fd[2];
-	int		pid;
-	char	*args[] = {"cat", NULL};
+	int		i;
+	char	**args;
 
-	if (pipe(pipe_fd) == -1)
-		return ((void)perror("Pipe error"));
-	pid = fork();
-	if (pid == -1)
-		return ((void)perror("Fork error"));
-	if (pid == 0)
+	args[0] = "cat";
+	args[1] = NULL;
+	i = -1;
+	while (++i < heredoc->num)
+		waitpid(heredoc->pid[i], NULL, 0);
+	dup2(heredoc->fd[i - 1][0], STDIN_FILENO);
+	i = -1;
+	while (++i < heredoc->num)
 	{
-		close (pipe_fd[0]);
-		heredoc(del, pipe_fd[1]);
+		close (heredoc->fd[i][1]);
+		close (heredoc->fd[i][0]);
 	}
-	waitpid(pid, NULL, 0);
-	close (pipe_fd[1]);
-	dup2(pipe_fd[0], STDIN_FILENO);
-	close (pipe_fd[0]);
 	execve("/bin/cat", args, data->env_full);
 	perror("Execve failed");
 }
 
-void	check_hedoc(t_data *data, t_token **token)
+static void	heredoc_init(t_data *data, t_heredoc *heredoc)
 {
-	int		num_files;
 	int		i;
-	t_token	*cur;
+	int		pid;
 
-	num_files = num_of_type(token, HERE_DOC, PIPE);
-	if (num_files < 1)
-		return ;
 	i = -1;
-	cur = *token;
-	while (++i < num_files)
+	while (++i < heredoc->num)
 	{
-		while (cur && cur->type != PIPE)
+		if (pipe(heredoc->fd[i]) == -1)
+			return ((void)perror("Pipe error"));
+		pid = fork();
+		if (pid == -1)
+			return ((void)perror("Fork error"));
+		if (pid == 0)
 		{
-			if (cur->type == HERE_DOC_OPT)
-			{
-				heredoc_init(data, cur->value);
-				cur = cur->next;
-				break ;
-			}
-			cur = cur->next;
+			close(heredoc->fd[i][0]);
+			_heredoc(heredoc->del[i], heredoc->fd[i][1]);
+		}
+		else
+		{
+			close(heredoc->fd[i][1]);
+			waitpid(pid, NULL, 0);
 		}
 	}
+	heredoc_final(data, heredoc);
+}
+
+void	check_heredoc(t_data *data, t_token **token)
+{
+	int			i;
+	t_token		*cur;
+	t_heredoc	*doc;
+
+	doc = malloc(sizeof(t_heredoc));
+	data->heredoc = doc;
+	data->heredoc->num = num_of_type(token, HERE_DOC, PIPE);
+	if (data->heredoc->num < 1)
+		return ;
+	data->heredoc->del = malloc(data->heredoc->num * sizeof(char *));
+	data->heredoc->pid = malloc(data->heredoc->num * sizeof(int));
+	data->heredoc->fd = malloc(data->heredoc->num * sizeof(int *));
+	i = -1;
+	while (++i < data->heredoc->num)
+		data->heredoc->fd[i] = malloc(2 * sizeof(int));
+	i = -1;
+	cur = *token;
+	while (cur && cur->type != PIPE)
+	{
+		if (cur->type == HERE_DOC_OPT)
+			data->heredoc->del[++i] = cur->value;
+		cur = cur->next;
+	}
+	heredoc_init(data, data->heredoc);
 }

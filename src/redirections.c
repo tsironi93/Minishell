@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 15:54:32 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/03 12:25:18 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/04 12:52:52 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,6 @@ bool	redirections(t_data *data, t_token **token)
 		|| !_open_files(data->output_fd, token, FILENAME_OUT)
 		|| !_open_files(data->append_fd, token, APPEND_FILENAME_OUT))
 		return (false);
-	check_hedoc(data, token);
+	check_heredoc(data, token);
 	return (true);
 }
