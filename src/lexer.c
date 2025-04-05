@@ -6,38 +6,38 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/31 09:18:40 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/05 12:10:04 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	bullshit(t_token **token, int *i, char *input)
+static void	bullshit(t_data *data, t_token **token, int *i, char *input)
 {
 	if (input[*i] == '|' && input[*i + 1] != '|')
 	{
-		append_token(token, "|", PIPE);
+		append_token(data, token, "|", PIPE);
 		(*i)++;
 	}
 	else if (input[*i] == '<')
 	{
 		if (input[++(*i)] == '<')
 		{
-			append_token(token, "<<", HERE_DOC);
+			append_token(data, token, "<<", HERE_DOC);
 			(*i)++;
 		}
 		else
-			append_token(token, "<", REDIRECT_INP);
+			append_token(data, token, "<", REDIRECT_INP);
 	}
 	else if (input[*i] == '>')
 	{
 		if (input[++(*i)] == '>')
 		{
-			append_token(token, ">>", APPEND);
+			append_token(data, token, ">>", APPEND);
 			(*i)++;
 		}
 		else
-			append_token(token, ">", REDIRECT_OUT);
+			append_token(data, token, ">", REDIRECT_OUT);
 	}
 }
 
@@ -69,31 +69,31 @@ static char	*wraper_quotes(char *input, int *i, char c)
 	return (ft_strdup(buffer));
 }
 
-static void	bullshit2(t_token **token, int *i, char *input)
+static void	bullshit2(t_data *data, t_token **token, int *i, char *input)
 {
 	char	*buf;
 
 	if (input[*i] == '"')
 	{
 		buf = wraper_quotes(input, i, '\"');
-		append_token(token, buf, DOUBLE_QUOTES);
+		append_token(data, token, buf, DOUBLE_QUOTES);
 		free(buf);
 	}
 	else if (input[*i] == 39)
 	{
 		buf = wraper_quotes(input, i, 39);
-		append_token(token, buf, SINGLE_QUOTES);
+		append_token(data, token, buf, SINGLE_QUOTES);
 		free(buf);
 	}
 	else if (input[*i] == '-')
 	{
 		buf = wraper_sign(input, i);
-		append_token(token, buf, ARGS);
+		append_token(data, token, buf, ARGS);
 		free(buf);
 	}
 }
 
-void	lexer(char *input, t_token **token)
+void	lexer(t_data *data, char *input, t_token **token)
 {
 	int		i;
 	char	*buf;
@@ -110,14 +110,14 @@ void	lexer(char *input, t_token **token)
 			|| input[i] == '/' || input[i] == '=' || input[i] == '?')
 		{
 			buf = wraper_sign(input, &i);
-			append_token(token, buf, UNKNOWN);
+			append_token(data, token, buf, UNKNOWN);
 			free(buf);
 		}
 		else if (input[i] == '"' || input[i] == 39 || input[i] == '-')
-			bullshit2(token, &i, input);
+			bullshit2(data, token, &i, input);
 		else if ((input[i] == '|' && input[i + 1] != '|') || input[i] == '>'
 			|| input[i] == '<')
-			bullshit(token, &i, input);
+			bullshit(data, token, &i, input);
 		else
 			return ((void)printf("Sorry cant handle this!\n"));
 	}

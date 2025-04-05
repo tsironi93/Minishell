@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 14:56:14 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/05 12:57:19 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,14 @@ bool	check_files(t_token **token)
 	return (true);
 }
 
-char	*trim_to_del(char *str, char del)
+char	*trim_to_del(t_data *data, char *str, char del)
 {
 	int		i;
 	char	buf[64];
 	int		pos;
+	int		start;
 
+	start = 0;
 	if (!str)
 		return (NULL);
 	if (!ft_strchr(str, del))
@@ -73,10 +75,10 @@ char	*trim_to_del(char *str, char del)
 	i = 1;
 	while (str[i])
 		if (str[i++] == del)
-			break ;
+			start = i;
 	pos = 0;
-	while (str[i])
-		buf[pos++] = str[i++];
+	while (str[++start])
+		buf[pos++] = str[start];
 	buf[pos] = '\0';
-	return (ft_strdup(buf));
+	return (gc_strdup(&data->gc, buf));
 }

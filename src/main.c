@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/04 13:35:15 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/05 12:08:47 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,17 @@
 
 static void	init(int ac, char **av, char **envp, t_data *data)
 {
-	int	i;
+	int		i;
 
 	i = 0;
-//	atexit(check_leaks);
+	atexit(check_leaks);
 	(void)ac;
 	(void)av;
+	data->gc = gc_new();
 	data->env = NULL;
 	data->tokens = NULL;
 	data->env_full = envp;
 	data->input = NULL;
-//	data->input_fd = NULL;
-//	data->append_fd = NULL;
-//	data->output_fd = NULL;
 	while (envp[i])
 		append_node(&data->env, envp[i++]);
 	data->env_cmd_paths = ft_split(getenv("PATH"), ':');
@@ -58,7 +56,7 @@ int	main(int ac, char **av, char **envp)
 			clean(&data, true);
 		if (!ft_strcmp(data.input, "print env"))
 			print_linked(&data.env);
-		lexer(data.input, &data.tokens);
+		lexer(&data, data.input, &data.tokens);
 		//print_tokens(&data.tokens);
 		if (!classify_tokens(&data.tokens))
 			continue ;

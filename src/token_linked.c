@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:14:37 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 16:43:29 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/05 13:06:07 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,25 +44,25 @@ int	num_of_type(t_token **token, t_token_type type, t_token_type until)
 	return (i);
 }
 
-static	t_token	*_create_token(char *value, t_token_type type)
+static	t_token	*_create_token(t_data *data, char *value, t_token_type type)
 {
 	t_token	*new_token;
 
-	new_token = (t_token *)malloc(sizeof(t_token));
+	new_token = gc_malloc(&data->gc, sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->type = type;
-	new_token->value = ft_strdup(value);
+	new_token->value = gc_strdup(&data->gc, value);
 	new_token->next = NULL;
 	return (new_token);
 }
 
-void	append_token(t_token **head, char *value, t_token_type type)
+void	append_token(t_data *data, t_token **head, char *value, t_token_type type)
 {
 	t_token	*new_token;
 	t_token	*temp;
 
-	new_token = _create_token(value, type);
+	new_token = _create_token(data, value, type);
 	if (!new_token)
 		return ;
 	if (*head == NULL)

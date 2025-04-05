@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ffds.c                                         :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/04 17:27:11 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/05 13:13:12 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static void	_heredoc(char *del, int fd)
 
 	while ("Grapse Malaka")
 	{
-		line = readline("MalakaDoc> ");
+		line = readline("> ");
 		if (!line || !ft_strcmp(line, del))
 		{
 			free (line);
@@ -31,16 +31,14 @@ static void	_heredoc(char *del, int fd)
 	exit(0);
 }
 
-static void	heredoc_final(t_data *data, t_heredoc *heredoc)
+static void	heredoc_final(t_data *data, t_heredoc *heredoc, int pid)
 {
 	int		i;
-	char	**args;
+	char	*args[] = {"cat", NULL};
 
-	args[0] = "cat";
-	args[1] = NULL;
 	i = -1;
 	while (++i < heredoc->num)
-		waitpid(heredoc->pid[i], NULL, 0);
+		waitpid(pid, NULL, 0);
 	dup2(heredoc->fd[i - 1][0], STDIN_FILENO);
 	i = -1;
 	while (++i < heredoc->num)
@@ -76,7 +74,7 @@ static void	heredoc_init(t_data *data, t_heredoc *heredoc)
 			waitpid(pid, NULL, 0);
 		}
 	}
-	heredoc_final(data, heredoc);
+	heredoc_final(data, heredoc, pid);
 }
 
 void	check_heredoc(t_data *data, t_token **token)
@@ -91,7 +89,6 @@ void	check_heredoc(t_data *data, t_token **token)
 	if (data->heredoc->num < 1)
 		return ;
 	data->heredoc->del = malloc(data->heredoc->num * sizeof(char *));
-	data->heredoc->pid = malloc(data->heredoc->num * sizeof(int));
 	data->heredoc->fd = malloc(data->heredoc->num * sizeof(int *));
 	i = -1;
 	while (++i < data->heredoc->num)
