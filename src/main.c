@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 12:08:47 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 17:16:52 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,16 @@ static void	init(int ac, char **av, char **envp, t_data *data)
 	printf(CYAN "\n\n\t\tHello Malaka\n\n");
 }
 
+static void	asd(t_data *data)
+{
+	if (*data->input)
+		add_history(data->input);
+	if (!ft_strcmp(data->input, "exit"))
+		clean(data, true);
+	if (!ft_strcmp(data->input, "print env"))
+		print_linked(&data->env);
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
@@ -40,29 +50,16 @@ int	main(int ac, char **av, char **envp)
 	{
 		clean(&data, false);
 		if (isatty(fileno(stdin)))
-			data.input = readline("~>:");
-//		else
-//		{
-//			char *line;
-//			line = get_next_line(fileno(stdin));
-//			shell->prompt = ft_strtrim(line, "\n");
-//			free(line);
-//		}
-		if (!data.input)
-			break ;
-		if (*data.input)
-			add_history(data.input);
-		if (!ft_strcmp(data.input, "exit"))
-			clean(&data, true);
-		if (!ft_strcmp(data.input, "print env"))
-			print_linked(&data.env);
+			data.input = gc_readline(&data.gc, "~>:");
+		asd(&data);
 		lexer(&data, data.input, &data.tokens);
-		//print_tokens(&data.tokens);
+		// print_tokens(&data.tokens);
 		if (!classify_tokens(&data.tokens))
 			continue ;
-		//print_tokens(&data.tokens);
+		// print_tokens(&data.tokens);
 		expansion(&data.tokens, &data);
-		//print_tokens(&data.tokens);
+		// print_tokens(&data.tokens);
+		merge(&data, &data.tokens);
 		if (!check_files(&data.tokens))
 			continue ;
 		if (num_of_type(&data.tokens, PIPE, NULLL))

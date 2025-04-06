@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:26:35 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 13:30:35 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 14:16:01 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,10 +83,14 @@ void	gc_sweep(t_gc *gc)
 	{
 		if (!(*cur)->marked)
 		{
-			free((*cur)->ptr);
-			unreached = *cur;
-			*cur = unreached->next;
-			free(unreached);
+			if ((*cur)->ptr)
+			{
+				free((*cur)->ptr);
+				(*cur)->ptr = NULL;
+				unreached = *cur;
+				*cur = unreached->next;
+				free(unreached);
+			}
 		}
 		else
 		{
@@ -149,4 +153,46 @@ char	*gc_strdup(t_gc *gc, const char *s)
 	obj->next = gc->objects;
 	gc->objects = obj;
 	return (dup);
+}
+
+char	*gc_readline(t_gc *gc, const char *prompt)
+{
+	t_gcobj	*obj;
+	char	*line;
+
+	line = readline(prompt);
+	if (!line)
+		return (NULL);
+	obj = malloc(sizeof(t_gcobj));
+	if (!obj)
+	{
+		perror("malloc GCObject failed");
+		exit(1);
+	}
+	obj->ptr = line;
+	obj->marked = 0;
+	obj->next = gc->objects;
+	gc->objects = obj;
+	return (line);
+}
+
+char	*gc_strjoin(t_gc *gc, char *s1, char *s2)
+{
+	char	*joined;
+	t_gcobj	*obj;
+
+	joined = ft_strjoin(s1, s2);
+	if (!joined)
+		return (NULL);
+	obj = malloc(sizeof(t_gcobj));
+	if (!obj)
+	{
+		perror("malloc GCObject failed");
+		exit(1);
+	}
+	obj->ptr = joined;
+	obj->marked = 0;
+	obj->next = gc->objects;
+	gc->objects = obj;
+	return (joined);
 }

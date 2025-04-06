@@ -6,12 +6,27 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:29:14 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 15:26:44 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 17:17:42 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <stdbool.h>
+
+static bool	find_file(t_token *token, t_token_type type)
+{
+	if (!token->next)
+		return (printf("minishell: syntax error near unexpected token `newline'"
+				"\n"), false);
+	token = token->next;
+	while (token && token->type == ISSPACE)
+		token = token->next;
+	if (token->type == UNKNOWN)
+		token->type = type + 1;
+	else
+		return (printf("minishell: syntax error near unexpected token `newline'"
+				"\n"), false);
+	return (true);
+}
 
 static bool	classify_extra(t_token **token)
 {
@@ -42,21 +57,27 @@ static bool	classify_util(t_token **token, t_token_type type)
 	t_token	*temp;
 
 	temp = search_tokens(token, type);
-	if (temp->next && type == REDIRECT_INP && temp->next->type == UNKNOWN)
-		temp->next->type = FILENAME_INP;
-	else if (temp->next && type == REDIRECT_OUT && temp->next->type == UNKNOWN)
-		temp->next->type = FILENAME_OUT;
-	else if (temp->next && type == APPEND && temp->next->type == UNKNOWN)
-		temp->next->type = APPEND_FILENAME_OUT;
-	else if (temp->next && type == HERE_DOC && temp->next->type == UNKNOWN)
-		temp->next->type = HERE_DOC_OPT;
-	else
+	if (type == REDIRECT_INP)
 	{
-		printf("minishell: syntax error near unexpected token `newline'\n");
-		return (false);
+		if (!find_file(temp, REDIRECT_INP))
+			return (false);
 	}
-	temp = temp->next;
-	*token = temp;
+	else if (type == REDIRECT_OUT)
+	{
+		if (!find_file(temp, REDIRECT_OUT))
+			return (false);
+	}
+	else if (type == APPEND)
+	{
+		if (!find_file(temp, APPEND))
+			return (false);
+	}
+	else if (type == HERE_DOC)
+	{
+		if (!find_file(temp, HERE_DOC))
+			return (false);
+	}
+	*token = temp->next;
 	return (true);
 }
 

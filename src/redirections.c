@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 15:54:32 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/04 12:52:52 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 09:28:31 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,21 @@ static void	redirect_fds(t_token_type type, int *fd, int num_fds)
 
 	i = -1;
 	if (type == FILENAME_OUT || type == APPEND_FILENAME_OUT)
+	{
 		while (++i < num_fds)
+		{
 			dup2(fd[i], STDOUT_FILENO);
+			close(fd[i]);
+		}
+	}
 	else
+	{
 		while (++i < num_fds)
+		{
 			dup2(fd[i], STDIN_FILENO);
+			close(fd[i]);
+		}
+	}
 }
 
 static bool	_open_files(int *ffd, t_token **token, t_token_type type)

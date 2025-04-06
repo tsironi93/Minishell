@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 12:10:04 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 13:16:11 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	bullshit(t_data *data, t_token **token, int *i, char *input)
 	}
 }
 
-static char	*wraper_sign(char *input, int *i)
+static char	*wraper_sign(t_data *data, char *input, int *i)
 {
 	int		pos;
 	char	buffer[256];
@@ -53,10 +53,10 @@ static char	*wraper_sign(char *input, int *i)
 			|| input[(*i)] == '?'))
 		buffer[pos++] = input[(*i)++];
 	buffer[pos] = '\0';
-	return (ft_strdup(buffer));
+	return (gc_strdup(&data->gc, buffer));
 }
 
-static char	*wraper_quotes(char *input, int *i, char c)
+static char	*wraper_quotes(t_data *data, char *input, int *i, char c)
 {
 	char	buffer[256];
 	int		pos;
@@ -66,7 +66,7 @@ static char	*wraper_quotes(char *input, int *i, char c)
 		buffer[pos++] = input[*i];
 	buffer[pos] = '\0';
 	(*i)++;
-	return (ft_strdup(buffer));
+	return (gc_strdup(&data->gc, buffer));
 }
 
 static void	bullshit2(t_data *data, t_token **token, int *i, char *input)
@@ -75,21 +75,18 @@ static void	bullshit2(t_data *data, t_token **token, int *i, char *input)
 
 	if (input[*i] == '"')
 	{
-		buf = wraper_quotes(input, i, '\"');
+		buf = wraper_quotes(data, input, i, '\"');
 		append_token(data, token, buf, DOUBLE_QUOTES);
-		free(buf);
 	}
 	else if (input[*i] == 39)
 	{
-		buf = wraper_quotes(input, i, 39);
+		buf = wraper_quotes(data, input, i, 39);
 		append_token(data, token, buf, SINGLE_QUOTES);
-		free(buf);
 	}
 	else if (input[*i] == '-')
 	{
-		buf = wraper_sign(input, i);
+		buf = wraper_sign(data, input, i);
 		append_token(data, token, buf, ARGS);
-		free(buf);
 	}
 }
 
@@ -103,15 +100,14 @@ void	lexer(t_data *data, char *input, t_token **token)
 	{
 		if (ft_isspace(input[i]))
 		{
+			append_token(data, token, "", ISSPACE);
 			i++;
-			continue ;
 		}
-		if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
+		else if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
 			|| input[i] == '/' || input[i] == '=' || input[i] == '?')
 		{
-			buf = wraper_sign(input, &i);
+			buf = wraper_sign(data, input, &i);
 			append_token(data, token, buf, UNKNOWN);
-			free(buf);
 		}
 		else if (input[i] == '"' || input[i] == 39 || input[i] == '-')
 			bullshit2(data, token, &i, input);

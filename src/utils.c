@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 12:57:19 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 15:31:49 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,19 +19,23 @@ int	ft_isspace(int c)
 	return (0);
 }
 
-void	free2d(char **a)
+void	merge(t_data *data, t_token **token)
 {
-	char	**temp;
+	t_token	*current;
+	char	*temp;
 
-	temp = a;
-	if (!a)
-		return ;
-	while (*a)
+	current = *token;
+	while (current && current->next)
 	{
-		free(*a);
-		a++;
+		if (current->type == ARGS && current->next->type == ARGS)
+		{
+			temp = gc_strdup(&data->gc, current->value);
+			current->value = gc_strjoin(&data->gc, temp, current->next->value);
+			current->next = current->next->next;
+		}
+		else
+			current = current->next;
 	}
-	free(temp);
 }
 
 void	go_at_start(t_token **token)
@@ -77,8 +81,8 @@ char	*trim_to_del(t_data *data, char *str, char del)
 		if (str[i++] == del)
 			start = i;
 	pos = 0;
-	while (str[++start])
-		buf[pos++] = str[start];
+	while (str[start])
+		buf[pos++] = str[start++];
 	buf[pos] = '\0';
 	return (gc_strdup(&data->gc, buf));
 }

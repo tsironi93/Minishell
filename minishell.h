@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 13:13:34 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/06 17:22:32 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,19 @@ typedef enum token_type
 	SINGLE_QUOTES,
 	PIPE,
 	REDIRECT_INP,
-	REDIRECT_OUT,
 	FILENAME_INP,
+	REDIRECT_OUT,
 	FILENAME_OUT,
 	UNKNOWN,
 	ARGS,
 	HERE_DOC,
-	APPEND_FILENAME_OUT,
 	HERE_DOC_OPT,
 	APPEND,
+	APPEND_FILENAME_OUT,
 	EXPAND,
 	COMMAND_EX,
-	NULLL
+	NULLL,
+	ISSPACE
 }	t_token_type;
 
 typedef struct s_gcobj
@@ -70,7 +71,8 @@ typedef struct s_gcobj
 	struct s_gcobj	*next;
 }	t_gcobj;
 
-typedef struct s_gc {
+typedef struct s_gc
+{
 	t_gcobj	*objects;
 	void	**roots[100];
 	int		root_count;
@@ -127,14 +129,18 @@ void	free2d(char **a);
 void	free_fds(t_data *data);
 void	*gc_malloc(t_gc *gc, size_t size);
 void	gc_destroy(t_gc *gc);
-t_gc	gc_new();
+t_gc	gc_new(void);
 void	gc_collect(t_gc *gc);
 char	*gc_strdup(t_gc *gc, const char *s);
+char	*gc_readline(t_gc *gc, const char *prompt);
+void	gc_add_root(t_gc *gc, void **ptr);
+char	*gc_strjoin(t_gc *gc, char *s1, char *s2);
 
 //------------------------LINKED LIST FUNCTIONS-------------------------//
 
 void	append_node(t_env **head, char *value);
-void	append_token(t_data *data, t_token **head, char *value, t_token_type type);
+void	append_token(t_data *data, t_token **head, char *value,
+			t_token_type type);
 t_token	*search_tokens(t_token **token, t_token_type type);
 int		num_of_type(t_token **token, t_token_type type, t_token_type until);
 
@@ -143,11 +149,11 @@ int		num_of_type(t_token **token, t_token_type type, t_token_type until);
 void	lexer(t_data *data, char *input, t_token **token);
 void	expansion(t_token **token, t_data *data);
 bool	classify_tokens(t_token **token);
+void	merge(t_data *data, t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
 void	check_heredoc(t_data *data, t_token **token);
-//bool	setup_fds(t_data *data, t_token **token);
 void	handle_pipeline(t_data *data, int num_pipes);
 bool	redirections(t_data *data, t_token **token);
 void	try_to_exec(t_data *data, t_token **token);

@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/01 14:18:46 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/05 21:43:52 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static void	_expand_variables(t_data *data, char *input, char **exp_result)
 		buffer[pos] = '\0';
 		if (pos > 0)
 		{
-			arg = ft_strdup(buffer);
+			arg = gc_strdup(&data->gc, buffer);
 			_append_expansion(&arg, exp_result);
 		}
 		pos = 0;
@@ -90,7 +90,6 @@ void	expansion(t_token **token, t_data *data)
 			if (ft_strchr(temp->value, '$'))
 			{
 				_expand_variables(data, temp->value, &str);
-				free(temp->value);
 				temp->value = str;
 				if (temp->type == COMMAND)
 					temp->type = COMMAND_EX;
