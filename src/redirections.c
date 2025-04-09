@@ -6,36 +6,34 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 15:54:32 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/06 09:28:31 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/09 18:47:57 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	redirect_fds(t_token_type type, int *fd, int num_fds)
+static bool	_open_and_redirect(t_token *cur)
 {
-	int	i;
+	int	fd;
 
-	i = -1;
-	if (type == FILENAME_OUT || type == APPEND_FILENAME_OUT)
-	{
-		while (++i < num_fds)
-		{
-			dup2(fd[i], STDOUT_FILENO);
-			close(fd[i]);
-		}
-	}
+	fd = -1;
+	if (cur->type == FILENAME_OUT)
+		fd = open(cur->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	else if (cur->type == FILENAME_INP)
+		fd = open(cur->value, O_RDONLY);
+	else if (cur->type == APPEND_FILENAME_OUT)
+		fd = open(cur->value, O_WRONLY | O_APPEND, 0644);
+	if (fd < 0)
+		return (perror("Minishell"), false);
+	if (cur->type == FILENAME_OUT || cur->type == APPEND_FILENAME_OUT)
+		dup2(fd, STDOUT_FILENO);
 	else
-	{
-		while (++i < num_fds)
-		{
-			dup2(fd[i], STDIN_FILENO);
-			close(fd[i]);
-		}
-	}
+		dup2(fd, STDIN_FILENO);
+	close (fd);
+	return (true);
 }
 
-static bool	_open_files(int *ffd, t_token **token, t_token_type type)
+static bool	_check_redirections(t_token **token, t_token_type type)
 {
 	int		num_files;
 	int		i;
@@ -48,25 +46,22 @@ static bool	_open_files(int *ffd, t_token **token, t_token_type type)
 	cur = *token;
 	while (cur && cur->type != PIPE)
 	{
-		if (cur->type == type && type == FILENAME_OUT)
-			ffd[++i] = open(cur->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		else if (cur->type == type && type == FILENAME_INP)
-			ffd[++i] = open(cur->value, O_RDONLY);
-		else if (cur->type == type && type == APPEND_FILENAME_OUT)
-			ffd[++i] = open(cur->value, O_WRONLY | O_APPEND, 0644);
-		if (!ffd && ffd[i] < 0)
-			return (perror("Minishell"), false);
+		if (cur->type == type)
+			if (!_open_and_redirect(cur))
+				return (false);
 		cur = cur->next;
 	}
-	return (redirect_fds(type, ffd, num_files), true);
+	return (true);
 }
 
 bool	redirections(t_data *data, t_token **token)
 {
 	go_at_start(token);
-	if (!_open_files(data->input_fd, token, FILENAME_INP)
-		|| !_open_files(data->output_fd, token, FILENAME_OUT)
-		|| !_open_files(data->append_fd, token, APPEND_FILENAME_OUT))
+	if (!_check_redirections(token, FILENAME_INP))
+		return (false);
+	if (!_check_redirections(token, FILENAME_OUT))
+		return (false);
+	if (!_check_redirections(token, APPEND_FILENAME_OUT))
 		return (false);
 	check_heredoc(data, token);
 	return (true);

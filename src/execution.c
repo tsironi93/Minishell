@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 13:32:05 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/09 17:01:32 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 
 	if (num_of_type(&data->tokens, COMMAND, NULLL) != 1)
 	{
-		redirections(data, token);
+		if (!redirections(data, token))
+			return ;
 		execve(cmd_path, cmd, data->env_full);
 		printf("execve failed\n");
 	}
@@ -68,7 +69,8 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		pid = fork();
 		if (pid == 0)
 		{
-			redirections(data, token);
+			if (!redirections(data, token))
+				return ;
 			execve(cmd_path, cmd, data->env_full);
 			printf("execve failed");
 		}

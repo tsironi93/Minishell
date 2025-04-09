@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/06 17:22:32 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/07 12:53:46 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,9 +107,9 @@ typedef struct s_data
 	char		**env_full;
 	char		**env_cmd_paths;
 	t_env		*env;
-	int			input_fd[100];
-	int			output_fd[100];
-	int			append_fd[100];
+	int			*input_fd;
+	int			*output_fd;
+	int			*append_fd;
 	t_heredoc	*heredoc;
 }		t_data;
 
