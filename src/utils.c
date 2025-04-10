@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/06 15:31:49 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:22:01 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,27 @@ void	go_at_start(t_token **token)
 	*token = cur;
 }
 
-bool	check_files(t_token **token)
+bool	check_files(t_data *data, t_token **token)
 {
 	t_token	*current;
+	int		cmd;
+	int		pipe;
 
+	pipe = 0;
+	cmd = 0;
 	current = *token;
 	while (current)
 	{
+		if (current->type == COMMAND)
+			cmd++;
+		if (current->type == PIPE)
+			pipe++;
 		if (current->type == FILENAME_INP && access(current->value, F_OK) != 0)
 			return (perror("Minishell: "), false);
 		current = current->next;
 	}
+	if (cmd <= pipe)
+		return (redirections(data, token), false);
 	return (true);
 }
 

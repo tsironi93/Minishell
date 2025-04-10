@@ -6,11 +6,39 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 21:43:52 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:56:27 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	_expand_error_code(t_data *data, char *str, t_token *node)
+{
+	int		i;
+	char	buffer[256];
+	int		pos;
+	char	*num;
+	int		j;
+
+	pos = 0;
+	i = 0;
+	num = ft_itoa(data->exit_code);
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1] && str[i + 1] == '?')
+		{
+			j = -1;
+			while (num[++j])
+				buffer[pos++] = num[j];
+			i += 2;
+		}
+		else
+			buffer[pos++] = str[i++];
+	}
+	free (num);
+	buffer[pos] = '\0';
+	node->value = gc_strdup(&data->gc, buffer);
+}
 
 char	*_find_env_path(char **env_list, char *search_key)
 {
@@ -70,7 +98,7 @@ static void	_expand_variables(t_data *data, char *input, char **exp_result)
 		while (!ft_isspace(input[++i]) && input[i])
 			buffer[pos++] = input[i];
 		buffer[pos] = '\0';
-		arg = ft_strdup(_find_env_path(data->env_full, buffer));
+		arg = gc_strdup(&data->gc, _find_env_path(data->env_full, buffer));
 		_append_expansion(&arg, exp_result);
 	}
 }
@@ -87,6 +115,8 @@ void	expansion(t_token **token, t_data *data)
 		if (temp->type == COMMAND || temp->type == DOUBLE_QUOTES
 			|| temp->type == ARGS)
 		{
+			if (ft_strnstr(temp->value, "$?", 2))
+				_expand_error_code(data, temp->value, temp);
 			if (ft_strchr(temp->value, '$'))
 			{
 				_expand_variables(data, temp->value, &str);

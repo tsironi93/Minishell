@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 15:54:32 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/09 18:47:57 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:50:35 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool	_open_and_redirect(t_token *cur)
 	else if (cur->type == FILENAME_INP)
 		fd = open(cur->value, O_RDONLY);
 	else if (cur->type == APPEND_FILENAME_OUT)
-		fd = open(cur->value, O_WRONLY | O_APPEND, 0644);
+		fd = open(cur->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd < 0)
 		return (perror("Minishell"), false);
 	if (cur->type == FILENAME_OUT || cur->type == APPEND_FILENAME_OUT)
@@ -36,13 +36,11 @@ static bool	_open_and_redirect(t_token *cur)
 static bool	_check_redirections(t_token **token, t_token_type type)
 {
 	int		num_files;
-	int		i;
 	t_token	*cur;
 
 	num_files = num_of_type(token, type, PIPE);
 	if (num_files < 1)
 		return (true);
-	i = -1;
 	cur = *token;
 	while (cur && cur->type != PIPE)
 	{
@@ -56,7 +54,7 @@ static bool	_check_redirections(t_token **token, t_token_type type)
 
 bool	redirections(t_data *data, t_token **token)
 {
-	go_at_start(token);
+	//go_at_start(token);
 	if (!_check_redirections(token, FILENAME_INP))
 		return (false);
 	if (!_check_redirections(token, FILENAME_OUT))

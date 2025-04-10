@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/09 17:01:32 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/10 08:59:43 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,22 @@ static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
 	char	*path;
 	char	*tmp;
 	char	*tmp_cmd;
+	char	buf[1024];
 
 	tmp_cmd = NULL;
 	if (!flag && cmd[0] == '/')
 		tmp_cmd = trim_to_del(data, cmd, '/');
+	else if (cmd[0] == '.' && cmd[1] == '/')
+		return (gc_strjoin(&data->gc, getcwd(buf, 1024), ++cmd));
 	else
 		tmp_cmd = gc_strdup(&data->gc, cmd);
 	while (*dirs)
 	{
 		tmp = ft_strjoin(*dirs, "/");
-		path = ft_strjoin(tmp, tmp_cmd);
+		path = gc_strjoin(&data->gc, tmp, tmp_cmd);
 		free(tmp);
 		if (access(path, X_OK) == 0)
 			return (path);
-		free(path);
 		dirs++;
 	}
 	printf("minishell: %s: command not found\n", tmp_cmd);
@@ -56,12 +58,15 @@ static unsigned int	_num_of_args(t_token **token, t_token_type type)
 static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 {
 	int	pid;
+	int	status;
 
+	status = 0;
 	if (num_of_type(&data->tokens, COMMAND, NULLL) != 1)
 	{
 		if (!redirections(data, token))
 			return ;
 		execve(cmd_path, cmd, data->env_full);
+		exit (errno);
 		printf("execve failed\n");
 	}
 	else
@@ -73,10 +78,11 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 				return ;
 			execve(cmd_path, cmd, data->env_full);
 			printf("execve failed");
+			exit(errno);
 		}
-		waitpid(pid, NULL, 0);
+		waitpid(pid, &status, 0);
+		data->exit_code = WEXITSTATUS(status);
 	}
-	free(cmd_path);
 	cmd = NULL;
 }
 

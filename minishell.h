@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/07 12:53:46 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/10 12:35:50 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 # include <termios.h>
 # include <curses.h>
 # include <term.h>
+# include <errno.h>
 # include <sys/ioctl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -107,9 +108,7 @@ typedef struct s_data
 	char		**env_full;
 	char		**env_cmd_paths;
 	t_env		*env;
-	int			*input_fd;
-	int			*output_fd;
-	int			*append_fd;
+	int			exit_code;
 	t_heredoc	*heredoc;
 }		t_data;
 
@@ -118,7 +117,7 @@ typedef struct s_data
 int		ft_isspace(int c);
 void	clean(t_data *data, bool exit_);
 void	go_at_start(t_token **token);
-bool	check_files(t_token **token);
+bool	check_files(t_data *data, t_token **token);
 char	*trim_to_del(t_data *data, char *str, char del);
 
 //-----------------------------FREE/ERROR-------------------------------//

@@ -6,11 +6,12 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/09 15:25:38 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/10 16:49:36 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <unistd.h>
 
 static void	init(int ac, char **av, char **envp, t_data *data)
 {
@@ -25,6 +26,7 @@ static void	init(int ac, char **av, char **envp, t_data *data)
 	data->tokens = NULL;
 	data->env_full = envp;
 	data->input = NULL;
+	data->exit_code = 0;
 	while (envp[i])
 		append_node(&data->env, envp[i++]);
 	data->env_cmd_paths = ft_split(getenv("PATH"), ':');
@@ -49,7 +51,7 @@ int	main(int ac, char **av, char **envp)
 	while ("Malaka")
 	{
 		clean(&data, false);
-		if (isatty(fileno(stdin)))
+		//if (isatty(fileno(stdin)))
 			data.input = gc_readline(&data.gc, "~>:");
 		asd(&data);
 		lexer(&data, data.input, &data.tokens);
@@ -60,8 +62,11 @@ int	main(int ac, char **av, char **envp)
 		expansion(&data.tokens, &data);
 		// print_tokens(&data.tokens);
 		merge(&data, &data.tokens);
-		if (!check_files(&data.tokens))
+		if (!check_files(&data, &data.tokens))
+		{
+			p();
 			continue ;
+		}
 		if (num_of_type(&data.tokens, PIPE, NULLL))
 			handle_pipeline(&data, num_of_type(&data.tokens, PIPE, NULLL));
 		else
