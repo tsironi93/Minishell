@@ -6,11 +6,32 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/11 18:05:48 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/12 13:42:57 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static bool check_buildin(t_data *data, char *cmd)
+{
+	int	i;
+
+	i = -1;
+	while (data->buildins[++i])
+		if (!ft_strcmp(data->buildins[i], cmd))
+			return (true);
+	return (false);
+}
+
+static void to_buildin(t_data *data, char *cmd)
+{
+	if (!ft_strcmp(cmd, "pwd"))
+		pwd_buildin();
+	else if (!ft_strcmp(cmd, "env"))
+		env_buildin(data);
+	else if (!ft_strcmp(cmd, "cd"))
+		cd_buildin(data, &data->tokens);
+}
 
 static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
 {
@@ -105,6 +126,11 @@ void	try_to_exec(t_data *data, t_token **token)
 	}
 	if (!temp)
 		return ;
+	if (check_buildin(data, temp->value))
+	{
+		to_buildin(data, temp->value);
+		return ;
+	}
 	if (temp->type == COMMAND_EX)
 		flag = true;
 	else

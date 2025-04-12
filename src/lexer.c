@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/06 13:16:11 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:52:25 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static char	*wraper_sign(t_data *data, char *input, int *i)
 	buffer[pos++] = input[(*i)++];
 	while (input[(*i)] && (ft_isalnum(input[(*i)]) || input[(*i)] == '$'
 			|| input[(*i)] == '.' || input[(*i)] == '/' || input[(*i)] == '='
-			|| input[(*i)] == '?'))
+			|| input[(*i)] == '?' || input[(*i)] == '~'))
 		buffer[pos++] = input[(*i)++];
 	buffer[pos] = '\0';
 	return (gc_strdup(&data->gc, buffer));
@@ -104,7 +104,7 @@ void	lexer(t_data *data, char *input, t_token **token)
 			i++;
 		}
 		else if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
-			|| input[i] == '/' || input[i] == '=' || input[i] == '?')
+			|| input[i] == '/' || input[i] == '=' || input[i] == '?' || input[i] == '~')
 		{
 			buf = wraper_sign(data, input, &i);
 			append_token(data, token, buf, UNKNOWN);

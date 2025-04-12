@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error_exit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 17:03:34 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 20:29:01 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/12 13:58:29 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,12 @@
 
 void	clean(t_data *data, bool exit_)
 {
-	//free_linked(data->tokens);
-	free_env(&data->env);
 	//free (data->input);
 	gc_collect(&data->gc);
 	data->tokens = NULL;
 	if (exit_)
 	{
+		//free_env(&data->env);
 		gc_destroy(&data->gc);
 		clear_history();
 		exit (EXIT_SUCCESS);

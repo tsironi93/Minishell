@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/11 17:03:34 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/12 13:38:26 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct s_env
 {
 	char			*str;
 	struct s_env	*next;
-}	t_env;
+}				t_env;
 
 typedef struct s_tocken
 {
@@ -91,18 +91,19 @@ typedef struct s_tocken
 	char			*value;
 	struct s_tocken	*next;
 	struct s_tocken	*previous;
-}	t_token;
+}				t_token;
 
 typedef struct s_heredoc
 {
 	char	**del;
 	int		num;
 	int		**fd;
-}	t_heredoc;
+}				t_heredoc;
 
 typedef struct s_data
 {
 	t_token		*tokens;
+	char		**buildins;
 	t_gc		gc;
 	char		*input;
 	char		**env_full;
@@ -110,7 +111,7 @@ typedef struct s_data
 	t_env		*env;
 	int			exit_code;
 	t_heredoc	*heredoc;
-}		t_data;
+}				t_data;
 
 //-------------------------------UTILS----------------------------------//
 
@@ -166,8 +167,10 @@ void	check_leaks(void);
 void	p(void);
 
 //--------------------------BUILD_INS-------------------------------//
-void 	init_env(t_data *data, char **envp);
-int 	env_buildin(t_data *data);
-
+void	init_env(t_data *data, char **envp);
+int		env_buildin(t_data *data);
+int		pwd_buildin(void);
+int		cd_buildin(t_data *data, t_token **token);
+void	env_reconstr(t_data *data, char **env_full);
 
 #endif // !MINISHELL_H
