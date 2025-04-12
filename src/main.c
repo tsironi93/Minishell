@@ -3,32 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/10 16:49:36 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:58:27 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <unistd.h>
 
 static void	init(int ac, char **av, char **envp, t_data *data)
 {
-	int		i;
-
-	i = 0;
 	atexit(check_leaks);
 	(void)ac;
 	(void)av;
 	data->gc = gc_new();
 	data->env = NULL;
 	data->tokens = NULL;
-	data->env_full = envp;
 	data->input = NULL;
 	data->exit_code = 0;
-	while (envp[i])
-		append_node(&data->env, envp[i++]);
+	init_env(data, envp);
 	data->env_cmd_paths = ft_split(getenv("PATH"), ':');
 	printf(CYAN "\n\n\t\tHello Malaka\n\n");
 }

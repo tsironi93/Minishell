@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/10 12:35:50 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/11 17:03:34 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,5 +164,10 @@ void	print_linked(t_env **ll);
 void	print_tokens(t_token **token);
 void	check_leaks(void);
 void	p(void);
+
+//--------------------------BUILD_INS-------------------------------//
+void 	init_env(t_data *data, char **envp);
+int 	env_buildin(t_data *data);
+
 
 #endif // !MINISHELL_H

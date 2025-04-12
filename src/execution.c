@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/10 08:59:43 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/11 18:05:48 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			return ;
 		execve(cmd_path, cmd, data->env_full);
 		exit (errno);
-		printf("execve failed\n");
+		perror("execve failed\n");
 	}
 	else
 	{
@@ -77,7 +77,7 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			if (!redirections(data, token))
 				return ;
 			execve(cmd_path, cmd, data->env_full);
-			printf("execve failed");
+			perror("execve failed");
 			exit(errno);
 		}
 		waitpid(pid, &status, 0);
