@@ -6,50 +6,15 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:25:32 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/12 13:46:06 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/13 09:37:16 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-void	env_reconstr(t_data *data, char **env_full)
+int	env_buildin(t_data *data)
 {
 	t_env	*cur;
-	int		i;
-
-	cur = data->env;
-	i = 0;
-	while (cur)
-	{
-		i++;
-		cur = cur->next;
-	}
-	env_full = malloc((i + 1) * sizeof(char *));
-	i = -1;
-	cur = data->env;
-	while (cur)
-	{
-		env_full[++i] = ft_strdup(cur->str);
-		cur = cur->next;
-	}
-	env_full[i + 1] = NULL;
-}
-
-void init_env(t_data *data, char **envp)
-{
-	int		i;
-
-	if (!envp || !*envp)
-		return ;
-	i = -1;
-	while (envp[++i])
-		append_node(&data->env, envp[i]);
-	env_reconstr(data, data->env_full);
-}
-
-int env_buildin(t_data *data)
-{
-	t_env *cur;
 
 	if (!data->env)
 		return (EXIT_FAILURE);

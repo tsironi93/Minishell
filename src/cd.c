@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/12 16:14:59 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/13 09:17:00 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd)
 			cur->str = ft_strjoin("OLDPWD=", prev_pwd);
 		cur = cur->next;
 	}
-	env_reconstr(data, data->env_full);
+	env_reconstr(data, &data->env_full);
 }
 
 int	cd_buildin(t_data *data, t_token **token)
@@ -34,13 +34,12 @@ int	cd_buildin(t_data *data, t_token **token)
 	char	*tmp;
 
 	cur = *token;
-	
 	if (cur->type == COMMAND)
 	{
 		while (cur)
 		{
 			if (cur->type == ARGS)
-				break;
+				break ;
 			cur = cur->next;
 		}
 	}
@@ -97,6 +96,5 @@ int	cd_buildin(t_data *data, t_token **token)
 		free(tmp);
 		return (EXIT_SUCCESS);
 	}
-	
 	return (EXIT_SUCCESS);
 }

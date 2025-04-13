@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/12 13:38:26 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/13 09:37:28 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ int		num_of_type(t_token **token, t_token_type type, t_token_type until);
 
 //------------------------------INIT------------------------------------//
 
+void	init(int ac, char **av, char **envp, t_data *data);
 void	lexer(t_data *data, char *input, t_token **token);
 void	expansion(t_token **token, t_data *data);
 bool	classify_tokens(t_token **token);
@@ -167,10 +168,9 @@ void	check_leaks(void);
 void	p(void);
 
 //--------------------------BUILD_INS-------------------------------//
-void	init_env(t_data *data, char **envp);
 int		env_buildin(t_data *data);
 int		pwd_buildin(void);
 int		cd_buildin(t_data *data, t_token **token);
-void	env_reconstr(t_data *data, char **env_full);
+void	env_reconstr(t_data *data, char ***env_full);
 
 #endif // !MINISHELL_H
