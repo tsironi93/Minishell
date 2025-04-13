@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 17:03:34 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/12 13:58:29 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/13 14:02:57 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,19 @@ void	clean(t_data *data, bool exit_)
 		clear_history();
 		exit (EXIT_SUCCESS);
 	}
+}
+
+void	free2d(char **a)
+{
+	int	i;
+
+	i = 0;
+	while (a[i])
+	{
+		free(a[i]);
+		i++;
+	}
+	free(a);
 }
 
 /*void	free_fds(t_data *data)

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/13 09:17:00 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/13 15:05:41 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,18 @@ void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd)
 	while (cur)
 	{
 		if (!ft_strncmp("PWD", cur->str, 3))
+		{
+			free(cur->str);
 			cur->str = ft_strjoin("PWD=", next_pwd);
+		}
 		if (!ft_strncmp("OLDPWD", cur->str, 6))
+		{
+			free(cur->str);
 			cur->str = ft_strjoin("OLDPWD=", prev_pwd);
+		}
 		cur = cur->next;
 	}
+	free2d(data->env_full);
 	env_reconstr(data, &data->env_full);
 }
 
@@ -32,6 +39,8 @@ int	cd_buildin(t_data *data, t_token **token)
 {
 	t_token	*cur;
 	char	*tmp;
+	char	*new_temp;
+	char	buffer[256];
 
 	cur = *token;
 	if (cur->type == COMMAND)
@@ -56,7 +65,7 @@ int	cd_buildin(t_data *data, t_token **token)
 		free(tmp);
 		return (EXIT_SUCCESS);
 	}
-	if (!ft_strcmp(cur->value, "-"))
+	else if (!ft_strcmp(cur->value, "-"))
 	{
 		tmp = getcwd(NULL, 0);
 		if (chdir(getenv("OLDPWD")) != 0)
@@ -69,21 +78,8 @@ int	cd_buildin(t_data *data, t_token **token)
 		free(tmp);
 		return (EXIT_SUCCESS);
 	}
-	if (!ft_strcmp(cur->value, "/"))
+	else if (!ft_strncmp(cur->value, "/", 1))
 	// strncmp, 1, look below!
-	{
-		tmp = getcwd(NULL, 0);
-		if (chdir("/") != 0)
-		{
-			perror("cd");
-			free(tmp);
-			return (errno);
-		}
-		update_env(data, data->env, tmp, "/");
-		free(tmp);
-		return (EXIT_SUCCESS);
-	}
-	if (!ft_strncmp(cur->value, "./", 2))
 	{
 		tmp = getcwd(NULL, 0);
 		if (chdir(cur->value) != 0)
@@ -92,7 +88,40 @@ int	cd_buildin(t_data *data, t_token **token)
 			free(tmp);
 			return (errno);
 		}
-		update_env(data, data->env, tmp, getcwd(NULL, 0));
+		update_env(data, data->env, tmp, cur->value);
+		free(tmp);
+		return (EXIT_SUCCESS);
+	}
+	else if (!ft_strncmp(cur->value, "./", 2))
+	{
+		tmp = getcwd(NULL, 0);
+		if (chdir(cur->value) != 0)
+		{
+			perror("cd");
+			free(tmp);
+			return (errno);
+		}
+		new_temp = getcwd(NULL, 0);
+		update_env(data, data->env, tmp, new_temp);
+		free(tmp);
+		free(new_temp);
+		return (EXIT_SUCCESS);
+	}
+	else if (!ft_strncmp(cur->value, "..", 2))
+	{
+		tmp = getcwd(NULL, 0);
+		int i = ft_strlen(tmp);
+
+		while (tmp[i] != '/')
+			i--;
+		ft_strlcpy(buffer, tmp, i + 1);
+		if (chdir(cur->value) != 0)
+		{
+			perror("cd");
+			free(tmp);
+			return (errno);
+		}
+		update_env(data, data->env, tmp, buffer);
 		free(tmp);
 		return (EXIT_SUCCESS);
 	}
