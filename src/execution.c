@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 12:35:19 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/14 18:48:11 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static bool	check_buildin(t_data *data, char *cmd)
 	return (false);
 }
 
-static void	to_buildin(t_data *data, char *cmd)
+static void	to_buildin(t_data *data, char *cmd, t_token **token)
 {
 	if (!ft_strcmp(cmd, "pwd"))
 		pwd_buildin();
@@ -31,6 +31,10 @@ static void	to_buildin(t_data *data, char *cmd)
 		env_buildin(data);
 	else if (!ft_strcmp(cmd, "cd"))
 		cd_buildin(data, &data->tokens);
+	else if (!ft_strcmp(cmd, "export"))
+		export_builtin(data, &data->env, token);
+	else if (!ft_strcmp(cmd, "unset"))
+		unset_builtin(data, &data->env, token);
 }
 
 static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
@@ -128,7 +132,7 @@ void	try_to_exec(t_data *data, t_token **token)
 		return ;
 	if (check_buildin(data, temp->value))
 	{
-		to_buildin(data, temp->value);
+		to_buildin(data, temp->value, &temp);
 		return ;
 	}
 	if (temp->type == COMMAND_EX)

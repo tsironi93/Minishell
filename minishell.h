@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 12:34:29 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/14 19:09:09 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,5 +172,9 @@ int		env_buildin(t_data *data);
 int		pwd_buildin(void);
 int		cd_buildin(t_data *data, t_token **token);
 void	env_reconstr(t_data *data, char ***env_full);
+int 	export_builtin(t_data *data, t_env **env, t_token **token);
+int		is_valid_identifier(char *cmd, char *str);
+void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd);
+int 	unset_builtin(t_data *data, t_env **env, t_token **token);
 
 #endif // !MINISHELL_H

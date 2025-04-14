@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/13 14:04:23 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:08:50 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,29 +23,6 @@ static void	init_buildins(char ***buildins)
 	(*buildins)[5] = ft_strdup("env");
 	(*buildins)[6] = ft_strdup("exit");
 	(*buildins)[7] = NULL;
-}
-
-void	env_reconstr(t_data *data, char ***env_full)
-{
-	t_env	*cur;
-	int		i;
-
-	cur = data->env;
-	i = 0;
-	while (cur)
-	{
-		i++;
-		cur = cur->next;
-	}
-	*env_full = malloc((i + 1) * sizeof(char *));
-	i = -1;
-	cur = data->env;
-	while (cur)
-	{
-		(*env_full)[++i] = ft_strdup(cur->str);
-		cur = cur->next;
-	}
-	(*env_full)[i + 1] = NULL;
 }
 
 static void	init_env(t_data *data, char **envp)

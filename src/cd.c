@@ -6,34 +6,11 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/14 15:19:16 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/14 18:08:36 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd)
-{
-	t_env	*cur;
-
-	cur = env;
-	while (cur)
-	{
-		if (!ft_strncmp("PWD", cur->str, 3))
-		{
-			free(cur->str);
-			cur->str = ft_strjoin("PWD=", next_pwd);
-		}
-		if (!ft_strncmp("OLDPWD", cur->str, 6))
-		{
-			free(cur->str);
-			cur->str = ft_strjoin("OLDPWD=", prev_pwd);
-		}
-		cur = cur->next;
-	}
-	free2d(data->env_full);
-	env_reconstr(data, &data->env_full);
-}
 
 int	cd_buildin(t_data *data, t_token **token)
 {
