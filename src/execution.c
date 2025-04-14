@@ -6,13 +6,13 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/12 13:42:57 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/14 12:35:19 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static bool check_buildin(t_data *data, char *cmd)
+static bool	check_buildin(t_data *data, char *cmd)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ static bool check_buildin(t_data *data, char *cmd)
 	return (false);
 }
 
-static void to_buildin(t_data *data, char *cmd)
+static void	to_buildin(t_data *data, char *cmd)
 {
 	if (!ft_strcmp(cmd, "pwd"))
 		pwd_buildin();
@@ -84,7 +84,7 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 	status = 0;
 	if (num_of_type(&data->tokens, COMMAND, NULLL) != 1)
 	{
-		if (!redirections(data, token))
+		if (!redirections(data, token, true))
 			return ;
 		execve(cmd_path, cmd, data->env_full);
 		exit (errno);
@@ -95,7 +95,7 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		pid = fork();
 		if (pid == 0)
 		{
-			if (!redirections(data, token))
+			if (!redirections(data, token, true))
 				return ;
 			execve(cmd_path, cmd, data->env_full);
 			perror("execve failed");

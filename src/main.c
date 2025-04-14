@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/13 15:05:54 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/14 12:45:54 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,8 @@ int	main(int ac, char **av, char **envp)
 			data.input = gc_readline(&data.gc, "~>:");
 		asd(&data);
 		lexer(&data, data.input, &data.tokens);
-		// print_tokens(&data.tokens);
 		if (!classify_tokens(&data.tokens))
 			continue ;
-		// print_tokens(&data.tokens);
 		expansion(&data.tokens, &data);
 		// print_tokens(&data.tokens);
 		merge(&data, &data.tokens);

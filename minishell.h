@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/13 09:37:28 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:34:29 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,9 +154,9 @@ void	merge(t_data *data, t_token **token);
 
 //----------------------------EXECUTION---------------------------------//
 
-void	check_heredoc(t_data *data, t_token **token);
+void	check_heredoc(t_data *data, t_token **token, bool flag);
 void	handle_pipeline(t_data *data, int num_pipes);
-bool	redirections(t_data *data, t_token **token);
+bool	redirections(t_data *data, t_token **token, bool flag);
 void	try_to_exec(t_data *data, t_token **token);
 
 //--------------------------TESTING_BENCH-------------------------------//

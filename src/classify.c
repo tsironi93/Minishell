@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:29:14 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/06 17:17:42 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:51:10 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static bool	find_file(t_token *token, t_token_type type)
 	token = token->next;
 	while (token && token->type == ISSPACE)
 		token = token->next;
-	if (token->type == UNKNOWN)
+	if (token->type == UNKNOWN || token->type == DOUBLE_QUOTES
+		|| token->type == SINGLE_QUOTES)
 		token->type = type + 1;
 	else
 		return (printf("minishell: syntax error near unexpected token `newline'"

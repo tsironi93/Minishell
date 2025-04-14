@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/05 13:13:12 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:34:45 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static void	heredoc_final(t_data *data, t_heredoc *heredoc, int pid)
 	perror("Execve failed");
 }
 
-static void	heredoc_init(t_data *data, t_heredoc *heredoc)
+static void	heredoc_init(t_data *data, t_heredoc *heredoc, bool flag)
 {
 	int		i;
 	int		pid;
@@ -74,10 +74,11 @@ static void	heredoc_init(t_data *data, t_heredoc *heredoc)
 			waitpid(pid, NULL, 0);
 		}
 	}
-	heredoc_final(data, heredoc, pid);
+	if (flag)
+		heredoc_final(data, heredoc, pid);
 }
 
-void	check_heredoc(t_data *data, t_token **token)
+void	check_heredoc(t_data *data, t_token **token, bool flag)
 {
 	int			i;
 	t_token		*cur;
@@ -101,5 +102,5 @@ void	check_heredoc(t_data *data, t_token **token)
 			data->heredoc->del[++i] = cur->value;
 		cur = cur->next;
 	}
-	heredoc_init(data, data->heredoc);
+	heredoc_init(data, data->heredoc, flag);
 }

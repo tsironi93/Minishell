@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/10 16:22:01 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/14 12:32:57 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	check_files(t_data *data, t_token **token)
 		current = current->next;
 	}
 	if (cmd <= pipe)
-		return (redirections(data, token), false);
+		return (redirections(data, token, false), false);
 	return (true);
 }
 
