@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 18:48:11 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/15 14:52:02 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,13 @@ static void	to_buildin(t_data *data, char *cmd, t_token **token)
 	else if (!ft_strcmp(cmd, "env"))
 		env_buildin(data);
 	else if (!ft_strcmp(cmd, "cd"))
-		cd_buildin(data, &data->tokens);
+		cd_buildin(data, token);
 	else if (!ft_strcmp(cmd, "export"))
 		export_builtin(data, &data->env, token);
 	else if (!ft_strcmp(cmd, "unset"))
 		unset_builtin(data, &data->env, token);
+	else if (!ft_strcmp(cmd, "exit"))
+		exit_builtin(data, token);
 }
 
 static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)

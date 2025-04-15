@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 12:45:54 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/15 15:00:07 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ static void	asd(t_data *data)
 {
 	if (*data->input)
 		add_history(data->input);
-	if (!ft_strcmp(data->input, "exit"))
-		clean(data, true);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -34,7 +32,7 @@ int	main(int ac, char **av, char **envp)
 		if (!classify_tokens(&data.tokens))
 			continue ;
 		expansion(&data.tokens, &data);
-		// print_tokens(&data.tokens);
+		 print_tokens(&data.tokens);
 		merge(&data, &data.tokens);
 		if (!check_files(&data, &data.tokens))
 			continue ;

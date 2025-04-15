@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 18:08:50 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/15 15:44:04 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,13 @@
 static void	init_buildins(char ***buildins)
 {
 	*buildins = malloc(8 * sizeof(char *));
-	(*buildins)[0] = ft_strdup("echo");
+	(*buildins)[0] = ft_strdup("exit");
 	(*buildins)[1] = ft_strdup("cd");
 	(*buildins)[2] = ft_strdup("pwd");
 	(*buildins)[3] = ft_strdup("export");
 	(*buildins)[4] = ft_strdup("unset");
 	(*buildins)[5] = ft_strdup("env");
-	(*buildins)[6] = ft_strdup("exit");
+	(*buildins)[6] = NULL; //ft_strdup("echo");
 	(*buildins)[7] = NULL;
 }
 
