@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/15 15:00:07 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/16 10:40:34 by turmoil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	main(int ac, char **av, char **envp)
 	init(ac, av, envp, &data);
 	while ("Malaka")
 	{
+		clean(&data, false);
 		if (isatty(fileno(stdin)))
 			data.input = gc_readline(&data.gc, "~>:");
 		asd(&data);
@@ -32,7 +33,7 @@ int	main(int ac, char **av, char **envp)
 		if (!classify_tokens(&data.tokens))
 			continue ;
 		expansion(&data.tokens, &data);
-		 print_tokens(&data.tokens);
+		 // print_tokens(&data.tokens);
 		merge(&data, &data.tokens);
 		if (!check_files(&data, &data.tokens))
 			continue ;
@@ -40,7 +41,6 @@ int	main(int ac, char **av, char **envp)
 			handle_pipeline(&data, num_of_type(&data.tokens, PIPE, NULLL));
 		else
 			try_to_exec(&data, &data.tokens);
-		clean(&data, false);
 	}
 	exit(EXIT_SUCCESS);
 }
