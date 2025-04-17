@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/15 14:51:11 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/16 12:12:15 by turmoil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,4 +177,5 @@ int		is_valid_identifier(char *cmd, char *str);
 void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd);
 int 	unset_builtin(t_data *data, t_env **env, t_token **token);
 int		exit_builtin(t_data *data, t_token **token);
+
 #endif // !MINISHELL_H

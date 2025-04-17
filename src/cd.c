@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/14 18:08:36 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/16 14:37:43 by turmoil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,7 @@ int	cd_buildin(t_data *data, t_token **token)
 	char	*new_temp;
 	char	buffer[256];
 
-	cur = *token;
-	if (cur->type == COMMAND)
-	{
-		while (cur)
-		{
-			if (cur->type == ARGS)
-				break ;
-			cur = cur->next;
-		}
-	}
+	cur = search_tokens(token, ARGS);
 	if (num_of_type(token, ARGS, PIPE) == 0 || !ft_strncmp(cur->value, "~", 1))
 	{
 		tmp = getcwd(NULL, 0);
@@ -38,7 +29,6 @@ int	cd_buildin(t_data *data, t_token **token)
 			free(tmp);
 			return (errno);
 		}
-		update_env(data, data->env, tmp, getenv("HOME"));
 		free(tmp);
 		return (EXIT_SUCCESS);
 	}
@@ -87,7 +77,7 @@ int	cd_buildin(t_data *data, t_token **token)
 		free(tmp);
 		return (EXIT_SUCCESS);
 	}
-	else // if (!ft_strncmp(cur->value, "./", 2))
+	else
 	{
 		tmp = getcwd(NULL, 0);
 		if (chdir(cur->value) != 0)

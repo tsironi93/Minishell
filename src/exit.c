@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:18:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/16 11:06:12 by turmoil          ###   ########.fr       */
+/*   Updated: 2025/04/17 13:32:06 by turmoil          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	exit_param(t_data *data, char *str)
 	{
 		if (!ft_isdigit(str[i++]))
 		{
-			printf("minishell: exit: %s: numeric argument required/n", str);
+			printf("minishell: exit: %s: numeric argument required\n", str);
 			data->exit_code = 255;
 			clean(data, true);
 			exit(data->exit_code);
@@ -38,7 +38,7 @@ int	exit_builtin(t_data *data, t_token **token)
 	printf("exit\n");
 	if (num_of_type(token, ARGS, PIPE) > 1)
 	{
-		printf("minishell: exit: too many arguments");
+		printf("minishell: exit: too many arguments\n");
 		data->exit_code = 1;
 	}
 	if (num_of_type(token, ARGS, PIPE) == 1)
