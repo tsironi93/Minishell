@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
+/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/16 12:12:15 by turmoil          ###   ########.fr       */
+/*   Updated: 2025/04/18 01:40:27 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	print_tokens(t_token **token);
 void	check_leaks(void);
 void	p(void);
 
-//--------------------------BUILD_INS-------------------------------//
+//--------------------------BUILTINS-------------------------------//
 int		env_buildin(t_data *data);
 int		pwd_buildin(void);
 int		cd_buildin(t_data *data, t_token **token);
@@ -177,5 +177,6 @@ int		is_valid_identifier(char *cmd, char *str);
 void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd);
 int 	unset_builtin(t_data *data, t_env **env, t_token **token);
 int		exit_builtin(t_data *data, t_token **token);
+int		echo_builtin(t_token **token);
 
 #endif // !MINISHELL_H
