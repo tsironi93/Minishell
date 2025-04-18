@@ -6,7 +6,7 @@
 /*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 01:57:55 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/04/18 02:02:11 by chiarakappe      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	echo_builtin(t_token **token)
 	while (cur && cur->type != ARGS)
 		cur = cur->next;
 	// check for -n flag
-	if (cur && cur->type == ARGS && !ft_strcmp(cur->value, "-n")
+	while (cur && cur->type == ARGS && !ft_strcmp(cur->value, "-n")
 		&& _is_valid_n(cur->value))
 	{
 		new_line = 0;
