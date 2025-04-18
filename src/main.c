@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/16 14:04:59 by turmoil          ###   ########.fr       */
+/*   Updated: 2025/04/18 09:06:44 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int ac, char **av, char **envp)
 		if (isatty(fileno(stdin)))
 			data.input = gc_readline(&data.gc, "~>:");
 		if (*data.input)
-		add_history(data.input);
+			add_history(data.input);
 		lexer(&data, data.input, &data.tokens);
 		if (!classify_tokens(&data.tokens))
 			continue ;
