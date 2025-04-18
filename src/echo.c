@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 02:02:11 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/04/18 14:18:51 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	_is_valid_n(char *str)
 	{
 		if (str[i] != 'n')
 			return (0);
-		i++;		
+		i++;
 	}
 	return (1);
 }
@@ -43,18 +43,20 @@ int	echo_builtin(t_token **token)
 	while (cur && cur->type != ARGS)
 		cur = cur->next;
 	// check for -n flag
-	while (cur && cur->type == ARGS && !ft_strcmp(cur->value, "-n")
-		&& _is_valid_n(cur->value))
+	while (cur && cur->type == ARGS	&& _is_valid_n(cur->value))
 	{
 		new_line = 0;
 		cur = cur->next;
 	}
 	// print args
-	while (cur && cur->type != PIPE && cur->type == ARGS)
+	while (cur && cur->type != PIPE)
 	{
-		printf("%s", cur->value);
-		if (cur->next && cur->next->type == ARGS)
-			printf(" ");
+		if (cur->type == ARGS)
+		{
+			printf("%s", cur->value);
+			if (cur->next && cur->next->type == ISSPACE)
+				printf(" ");
+		}
 		cur = cur->next;
 	}
 	if (new_line)
