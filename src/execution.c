@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 13:20:52 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/18 15:48:41 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static void	to_buildin(t_data *data, char *cmd, t_token **token)
 	else if (!ft_strcmp(cmd, "exit"))
 		exit_builtin(data, token);
 	else if (!ft_strcmp(cmd, "echo"))
-		echo_builtin(token);
+		echo_builtin(data, token);
 }
 
 static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
