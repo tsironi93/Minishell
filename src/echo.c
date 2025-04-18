@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 15:48:33 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:01:31 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,4 @@ int	echo_builtin(t_data *data, t_token **token)
 	if (new_line)
 		printf("\n");
 	exit (data->exit_code);
-
-
-
-
-	
 }

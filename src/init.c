@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 10:53:58 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/18 16:40:13 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,8 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	init_env(data, envp);
 	data->env_cmd_paths = ft_split(getenv("PATH"), ':'); //NEEDS TO CHANGE
 	init_buildins(&data->buildins);
-	printf(CYAN "\n\n\t\tHello Malaka\n\n");
+	signal(SIGINT, sigint_handler);
+	signal(SIGTSTP, sigtstp_handler);
+	signal(SIGCHLD, sigchld_handler);
+	// printf(CYAN "\n\n\t\tHello Malaka\n\n");
 }

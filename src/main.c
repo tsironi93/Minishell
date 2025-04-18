@@ -6,11 +6,13 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 15:27:36 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:02:16 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+volatile sig_atomic_t	g_child_pid = -1;
 
 int	main(int ac, char **av, char **envp)
 {

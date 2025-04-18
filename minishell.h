@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 15:48:11 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/18 16:48:15 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,6 +153,12 @@ void	expansion(t_token **token, t_data *data);
 bool	classify_tokens(t_token **token);
 void	merge(t_data *data, t_token **token);
 
+//-----------------------------SIGNALS----------------------------------//
+
+void	sigint_handler(int sig);
+void	sigtstp_handler(int sig);
+void	sigchld_handler(int sig);
+
 //----------------------------EXECUTION---------------------------------//
 
 void	check_heredoc(t_data *data, t_token **token, bool flag);
@@ -160,25 +166,24 @@ void	handle_pipeline(t_data *data, int num_pipes);
 bool	redirections(t_data *data, t_token **token, bool flag);
 void	try_to_exec(t_data *data, t_token **token);
 
-//--------------------------TESTING_BENCH-------------------------------//
+//--------------------------BUILTINS-------------------------------//
+int		env_buildin(t_data *data);
+int		pwd_buildin(void);
+int		cd_buildin(t_data *data, t_token **token);
+void	env_reconstr(t_data *data, char ***env_full);
+int		export_builtin(t_data *data, t_env **env, t_token **token);
+int		is_valid_identifier(char *cmd, char *str);
+void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd);
+int		unset_builtin(t_data *data, t_env **env, t_token **token);
+int		exit_builtin(t_data *data, t_token **token);
+int		echo_builtin(t_data *data, t_token **token);
 
+//--------------------------TESTING_BENCH-------------------------------//
 void	print_tokens(t_token **token);
 void	print_linked(t_env **ll);
 void	print_tokens(t_token **token);
 void	check_leaks(void);
 char	*get_next_line(int fd);
 void	p(void);
-
-//--------------------------BUILTINS-------------------------------//
-int		env_buildin(t_data *data);
-int		pwd_buildin(void);
-int		cd_buildin(t_data *data, t_token **token);
-void	env_reconstr(t_data *data, char ***env_full);
-int 	export_builtin(t_data *data, t_env **env, t_token **token);
-int		is_valid_identifier(char *cmd, char *str);
-void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd);
-int 	unset_builtin(t_data *data, t_env **env, t_token **token);
-int		exit_builtin(t_data *data, t_token **token);
-int		echo_builtin(t_data *data, t_token **token);
 
 #endif // !MINISHELL_H

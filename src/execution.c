@@ -6,11 +6,13 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 15:48:41 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/18 17:01:52 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+#include <sys/wait.h>
+#include <system_error>
 
 static bool	check_buildin(t_data *data, char *cmd)
 {
@@ -94,6 +96,8 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 	temp = search_tokens(token, COMMAND);
 	if (num_of_type(&data->tokens, COMMAND, NULLL) != 1)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGTSTP, SIG_DFL);
 		if (!redirections(data, token, true))
 			return ;
 		if (check_buildin(data, temp->value))
@@ -107,22 +111,29 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 	}
 	else
 	{
+		if (check_buildin(data, temp->value))
+		{
+			if (!redirections(data, token, true))
+				return ;
+			to_buildin(data, temp->value, &temp);
+			return ;
+		}
 		pid = fork();
 		if (pid == 0)
 		{
-			if (check_buildin(data, temp->value))
-			{
-				if (!redirections(data, token, true))
-					return ;
-				to_buildin(data, temp->value, &temp);
+			signal(SIGINT, SIG_DFL);
+			signal(SIGTSTP, SIG_DFL);
+			if (!redirections(data, token, true))
 				return ;
-			}
-			else
-			{
-				execve(cmd_path, cmd, data->env_full);
-				perror("execve failed");
-				exit(errno);
-			}
+			execve(cmd_path, cmd, data->env_full);
+			perror("execve failed");
+			exit(errno);
+		}
+		else if (pid > 0)
+		{
+			g_child_pid = pid;
+			waitpid(pid, &status, 0);
+			g_child_pid = -1;
 		}
 		waitpid(pid, &status, 0);
 		data->exit_code = WEXITSTATUS(status);
