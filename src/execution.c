@@ -6,7 +6,7 @@
 /*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 01:51:24 by chiarakappe      ###   ########.fr       */
+/*   Updated: 2025/04/18 13:20:52 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,28 +86,43 @@ static unsigned int	_num_of_args(t_token **token, t_token_type type)
 
 static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 {
-	int	pid;
-	int	status;
+	int		pid;
+	int		status;
+	t_token	*temp;
 
 	status = 0;
+	temp = search_tokens(token, COMMAND);
 	if (num_of_type(&data->tokens, COMMAND, NULLL) != 1)
 	{
 		if (!redirections(data, token, true))
 			return ;
-		execve(cmd_path, cmd, data->env_full);
-		exit (errno);
-		perror("execve failed\n");
+		if (check_buildin(data, temp->value))
+			to_buildin(data, temp->value, &temp);
+		else
+		{
+			execve(cmd_path, cmd, data->env_full);
+			exit (errno);
+			perror("execve failed\n");
+		}
 	}
 	else
 	{
 		pid = fork();
 		if (pid == 0)
 		{
-			if (!redirections(data, token, true))
+			if (check_buildin(data, temp->value))
+			{
+				if (!redirections(data, token, true))
+					return ;
+				to_buildin(data, temp->value, &temp);
 				return ;
-			execve(cmd_path, cmd, data->env_full);
-			perror("execve failed");
-			exit(errno);
+			}
+			else
+			{
+				execve(cmd_path, cmd, data->env_full);
+				perror("execve failed");
+				exit(errno);
+			}
 		}
 		waitpid(pid, &status, 0);
 		data->exit_code = WEXITSTATUS(status);
@@ -126,6 +141,8 @@ void	try_to_exec(t_data *data, t_token **token)
 	i = 0;
 	flag = false;
 	temp = *token;
+	cmd = NULL;
+	cmd_path = NULL;
 	while (temp)
 	{
 		if (temp->type == COMMAND || temp->type == COMMAND_EX)
@@ -134,26 +151,24 @@ void	try_to_exec(t_data *data, t_token **token)
 	}
 	if (!temp)
 		return ;
-	if (check_buildin(data, temp->value))
-	{
-		to_buildin(data, temp->value, &temp);
-		return ;
-	}
 	if (temp->type == COMMAND_EX)
 		flag = true;
 	else
 		flag = false;
-	cmd_path = _find_exec(data, temp->value, data->env_cmd_paths, flag);
-	if (!cmd_path)
-		return ;
-	cmd = gc_malloc(&data->gc, (_num_of_args(token, ARGS) + 2) * sizeof(char *));
-	cmd[i++] = gc_strdup(&data->gc, temp->value);
-	while (temp && temp->type != PIPE)
+	if (!check_buildin(data, temp->value))
 	{
-		if (temp->type == ARGS)
-			cmd[i++] = gc_strdup(&data->gc, temp->value);
-		temp = temp->next;
+		cmd_path = _find_exec(data, temp->value, data->env_cmd_paths, flag);
+		if (!cmd_path)
+			return ;
+		cmd = gc_malloc(&data->gc, (_num_of_args(token, ARGS) + 2) * sizeof(char *));
+		cmd[i++] = gc_strdup(&data->gc, temp->value);
+		while (temp && temp->type != PIPE)
+		{
+			if (temp->type == ARGS)
+				cmd[i++] = gc_strdup(&data->gc, temp->value);
+			temp = temp->next;
+		}
+		cmd[i] = NULL;
 	}
-	cmd[i] = NULL;
 	do_i_fork(data, token, cmd, cmd_path);
 }
