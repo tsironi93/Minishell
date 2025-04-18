@@ -6,7 +6,7 @@
 /*   By: chiarakappe <chiarakappe@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 10:35:27 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/18 15:26:57 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,7 @@ void	print_tokens(t_token **token);
 void	print_linked(t_env **ll);
 void	print_tokens(t_token **token);
 void	check_leaks(void);
+char	*get_next_line(int fd);
 void	p(void);
 
 //--------------------------BUILTINS-------------------------------//
