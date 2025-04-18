@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 16:01:31 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:34:03 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,20 +44,23 @@ int	echo_builtin(t_data *data, t_token **token)
 	while (cur && cur->type != ARGS)
 		cur = cur->next;
 	// check for -n flag
-	while (cur && cur->type == ARGS	&& _is_valid_n(cur->value))
-	{
-		new_line = 0;
-		cur = cur->next;
-	}
-	// print args
-	while (cur && cur->type != PIPE)
-	{
-		if (cur->type == ARGS)
-		{
-			printf("%s", cur->value);
-			if (cur->next && cur->next->type == ISSPACE)
-				printf(" ");
-		}
+	while (cur && (cur->type == ARGS || cur->type == ISSPACE))
+    {
+        if (_is_valid_n(cur->value))
+            new_line = 0;
+        if (cur->type == ARGS && !_is_valid_n(cur->value))
+            break ;
+        cur = cur->next;
+    }
+    // print args
+    while (cur && cur->type != PIPE)
+    {
+        if (cur->type == ARGS)
+        {
+            printf("%s", cur->value);
+            if (cur->next && cur->next->type == ISSPACE)
+                printf(" ");
+        }
 		cur = cur->next;
 	}
 	if (new_line)

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:18:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 10:59:09 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/18 17:32:33 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	exit_builtin(t_data *data, t_token **token)
 	if (num_of_type(token, ARGS, PIPE) > 1)
 	{
 		printf("minishell: exit: too many arguments\n");
-		data->exit_code = 1;
+		return (data->exit_code = 1);
 	}
 	if (num_of_type(token, ARGS, PIPE) == 1)
 	{
