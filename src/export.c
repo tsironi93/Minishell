@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:51 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/14 19:15:20 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/19 14:49:57 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,6 @@ int export_builtin(t_data *data, t_env **env, t_token **token)
 		free2d(data->env_full);
 		env_reconstr(data, &data->env_full);
 	}
-	return (EXIT_SUCCESS);
+	return (data->exit_code = 0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:25:32 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 11:49:23 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/19 14:49:26 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,12 +63,12 @@ int	env_buildin(t_data *data)
 	t_env	*cur;
 
 	if (!data->env)
-		exit(EXIT_FAILURE);
+		return(data->exit_code = 1);
 	cur = data->env;
 	while (cur)
 	{
 		printf("%s\n", cur->str);
 		cur = cur->next;
 	}
-	exit(EXIT_SUCCESS);
+	return(data->exit_code = 0);
 }
