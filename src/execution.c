@@ -6,13 +6,11 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 17:01:52 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/19 14:33:55 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <sys/wait.h>
-#include <system_error>
 
 static bool	check_buildin(t_data *data, char *cmd)
 {

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 16:48:15 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/19 14:33:21 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@
 # define MAGENTA "\x1b[95m"
 # define CYAN    "\x1b[96m"
 # define WHITE   "\x1b[97m"
+
+extern volatile sig_atomic_t	g_child_pid;
 
 typedef enum token_type
 {

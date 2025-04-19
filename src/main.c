@@ -6,13 +6,11 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/18 17:02:16 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/19 14:36:17 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-volatile sig_atomic_t	g_child_pid = -1;
 
 int	main(int ac, char **av, char **envp)
 {
@@ -31,7 +29,14 @@ int	main(int ac, char **av, char **envp)
 			data.input = ft_strtrim(line, "\n");
 			free(line);
 		}
-		if (*data.input)
+		if (!data.input)
+		{
+			if (isatty(fileno(stdin)))
+				printf("exit\n");
+			clean(&data, true);
+			exit(data.exit_code);
+		}
+		if (isatty(fileno(stdin)))
 			add_history(data.input);
 		lexer(&data, data.input, &data.tokens);
 		if (!classify_tokens(&data.tokens))
