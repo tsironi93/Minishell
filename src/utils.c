@@ -3,14 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 12:32:57 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/19 16:27:49 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	copy_str(char *dest, const char *src, size_t *i)
+{
+	size_t	j;
+
+	j = 0;
+	while (src[j])
+	{
+		dest[*i] = src[j];
+		(*i)++;
+		j++;
+	}
+}
+
+char	*ft_strjoin3(char const *s1, char const *symbol, char const *s2)
+{
+	size_t	total_len;
+	char	*result;
+	size_t	i;
+
+	if (!s1 || !symbol || !s2)
+		return (NULL);
+	total_len = ft_strlen(s1) + ft_strlen(symbol) + ft_strlen(s2);
+	result = (char *)malloc(sizeof(char) * (total_len + 1));
+	if (!result)
+		return (NULL);
+	i = 0;
+	copy_str(result, s1, &i);
+	copy_str(result, symbol, &i);
+	copy_str(result, s2, &i);
+	result[i] = '\0';
+	return (result);
+}
 
 int	ft_isspace(int c)
 {
