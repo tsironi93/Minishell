@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/10 16:56:27 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/21 13:05:50 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,6 @@ static void	_append_expansion(char **arg, char **name)
 		*name = ft_strjoin(temp, *arg);
 		free (temp);
 	}
-	free (*arg);
 	*arg = "";
 }
 
@@ -86,8 +85,11 @@ static void	_expand_variables(t_data *data, char *input, char **exp_result)
 	while (input[i])
 	{
 		pos = 0;
-		while (input[i] && input[i] != '$')
+		while (input[i] && input[i] != '$' && input[i] != '\'')
 			buffer[pos++] = input[i++];
+		if (input[i] == '\'')
+			while (input[++i] && input[i] != '\'')
+				buffer[pos++] = input[i];
 		buffer[pos] = '\0';
 		if (pos > 0)
 		{
