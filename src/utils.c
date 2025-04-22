@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 11:12:55 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 11:31:03 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,15 @@ bool	check_files(t_data *data, t_token **token)
 		if (current->type == PIPE)
 			pipe++;
 		if (current->type == FILENAME_INP && access(current->value, F_OK) != 0)
-			return (perror("Minishell: "), false);
+		{
+			if (num_of_type(token, PIPE, NULLL) != 0)
+				return (true);
+			else
+				return (perror("Minishell: "), false);
+		}
 		current = current->next;
 	}
-	if (cmd <= pipe)// && pipe == 0)
+	if (cmd <= pipe)
 		return (redirections(data, token, false), false);
 	return (true);
 }

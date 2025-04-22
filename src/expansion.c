@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 10:40:15 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 12:21:21 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	*_find_env_path(char **env_list, char *search_key)
 			return (path + (ft_strlen(no_dollar) + 1));
 	}
 	if (!ft_strchr(no_dollar, '"'))
-		return (no_dollar);
+		return ("");
 	while (ft_strchr(search_key, '"'))
 		search_key = ft_strtrim(search_key, "\"");
 	return (search_key);

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/12 13:52:25 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/22 12:17:52 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,9 +48,9 @@ static char	*wraper_sign(t_data *data, char *input, int *i)
 
 	pos = 0;
 	buffer[pos++] = input[(*i)++];
-	while (input[(*i)] && (ft_isalnum(input[(*i)]) || input[(*i)] == '$'
-			|| input[(*i)] == '.' || input[(*i)] == '/' || input[(*i)] == '='
-			|| input[(*i)] == '?' || input[(*i)] == '~'))
+	while (input[(*i)] && (ft_isalnum(input[(*i)]) || input[(*i)] == '.'
+			|| input[(*i)] == '/' || input[(*i)] == '='
+			|| input[(*i)] == '?' || input[(*i)] == '~' || input[(*i)] == '*'))
 		buffer[pos++] = input[(*i)++];
 	buffer[pos] = '\0';
 	return (gc_strdup(&data->gc, buffer));
@@ -102,6 +102,13 @@ void	lexer(t_data *data, char *input, t_token **token)
 		{
 			append_token(data, token, "", ISSPACE);
 			i++;
+		}
+		else if (input[i] == '\\' && input[i + 1])
+		{
+			buf[0] = input[i + 1];
+			buf[1] = '\0';
+			append_token(data, token, buf, SINGLE_QUOTES);
+			i += 2;
 		}
 		else if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'
 			|| input[i] == '/' || input[i] == '=' || input[i] == '?' || input[i] == '~')
