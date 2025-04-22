@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/21 13:11:43 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:08:09 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ static void	init_env(t_data *data, char **envp)
 	{
 		if (!ft_strncmp(envp[i], "SHLVL=", 6))
 			update_env_value(data, envp[i]);
+		else if (!ft_strncmp(envp[i], "OLDPWD=", 7))
+			continue;
 		else
 			append_node(&data->env, envp[i]);
 	}

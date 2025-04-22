@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/19 14:33:21 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:14:48 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ void	try_to_exec(t_data *data, t_token **token);
 
 //--------------------------BUILTINS-------------------------------//
 int		env_buildin(t_data *data);
-int		pwd_buildin(void);
+int		pwd_buildin(t_data *data);
 int		cd_buildin(t_data *data, t_token **token);
 void	env_reconstr(t_data *data, char ***env_full);
 int		export_builtin(t_data *data, t_env **env, t_token **token);

@@ -6,12 +6,25 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 10:35:55 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:39:40 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-#include <sys/syslimits.h>
+
+static void	create_oldpwd(t_env **env)
+{
+	t_env	*cur;
+
+	cur = *env;
+	while (cur)
+	{
+		if (!ft_strncmp(cur->str, "OLDPWD=", 7))
+			return ;
+		cur = cur->next;
+	}
+	append_node(env, "OLDPWD=");
+}
 
 static int	current_dir(t_data *data, t_token *cur)
 {
@@ -20,13 +33,13 @@ static int	current_dir(t_data *data, t_token *cur)
 
 	tmp = getcwd(NULL, 0);
 	if (!tmp)
-		return (perror("getcwd"), data->exit_code = errno, data->exit_code);
+		return (perror("getcwd"), data->exit_code = 1, data->exit_code);
 	if (chdir(cur->value) != 0)
-		return (perror("cd"), free(tmp), data->exit_code = errno,
+		return (perror("cd"), free(tmp), data->exit_code = 1,
 			data->exit_code);
 	new_temp = getcwd(NULL, 0);
 	if (!new_temp)
-		return (perror("getcwd"), data->exit_code = errno, data->exit_code);
+		return (perror("getcwd"), data->exit_code = 1, data->exit_code);
 	update_env(data, data->env, tmp, new_temp);
 	free(tmp);
 	free(new_temp);
@@ -42,13 +55,13 @@ static int	up_a_level(t_data *data, t_token *cur)
 
 	tmp = getcwd(NULL, 0);
 	if (!tmp)
-		return (perror("getcwd"), data->exit_code = errno, data->exit_code);
+		return (perror("getcwd"), data->exit_code = 1, data->exit_code);
 	i = ft_strlen(tmp);
 	while (tmp[i] != '/' && i > 0)
 		i--;
 	ft_strlcpy(buffer, tmp, i + 1);
 	if (chdir(cur->value) != 0)
-		return (perror("cd"), free(tmp), data->exit_code = errno,
+		return (perror("cd"), free(tmp), data->exit_code = 1,
 			data->exit_code);
 	update_env(data, data->env, tmp, buffer);
 	free(tmp);
@@ -56,15 +69,33 @@ static int	up_a_level(t_data *data, t_token *cur)
 	return (data->exit_code);
 }
 
+/* bash-3.2$ ./minishell
+~>:cd -
+
+
+        -------->DEBUG<-------
+
+cd: Bad address
+~>:cd ..
+~>:cd --
+cd: No such file or directory
+~>:cd -
+
+
+        -------->DEBUG<-------
+
+cd: Bad address
+~>: */
+
 static int	cd_helper(t_data *data, char *next_dir)
 {
 	char	*tmp;
 
 	tmp = getcwd(NULL, 0);
 	if (!tmp)
-		return (perror("getcwd"), data->exit_code = errno, data->exit_code);
+		return (perror("getcwd"), data->exit_code = 1, data->exit_code);
 	if (chdir(next_dir) != 0)
-		return (perror("cd"), free(tmp), data->exit_code = errno,
+		return (perror("cd"), free(tmp), data->exit_code = 1,
 			data->exit_code);
 	update_env(data, data->env, tmp, next_dir);
 	free(tmp);
@@ -77,6 +108,7 @@ int	cd_buildin(t_data *data, t_token **token)
 	t_token	*cur;
 
 	cur = search_tokens(token, ARGS);
+	create_oldpwd(&data->env);
 	if (num_of_type(token, ARGS, PIPE) == 0)
 		return (cd_helper(data, getenv("HOME")));
 	if (!ft_strncmp(cur->value, "~", 1))

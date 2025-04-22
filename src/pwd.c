@@ -6,13 +6,13 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 08:59:47 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/12 13:36:36 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/22 16:14:12 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	pwd_buildin(void)
+int	pwd_buildin(t_data *data)
 {
 	char	*buf;
 
@@ -20,11 +20,11 @@ int	pwd_buildin(void)
 	if (buf == NULL)
 	{
 		perror("getcwd");
-		return (errno);
+		return (data->exit_code = errno);
 	}
 	printf("%s\n", buf);
 	free(buf);
-	return (EXIT_SUCCESS);
+	return (data->exit_code = 0);
 }
 
 

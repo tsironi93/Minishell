@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 12:12:41 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:07:47 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ int	main(int ac, char **av, char **envp)
 			continue ;
 		// print_tokens(&data.tokens);
 		expansion(&data.tokens, &data);
-		// print_tokens(&data.tokens);
 		merge(&data, &data.tokens);
+		//print_tokens(&data.tokens);
 		if (!check_files(&data, &data.tokens))
 			continue ;
 		if (num_of_type(&data.tokens, PIPE, NULLL))

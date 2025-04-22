@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 12:17:52 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:25:49 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,9 @@ void	lexer(t_data *data, char *input, t_token **token)
 			|| input[i] == '<')
 			bullshit(data, token, &i, input);
 		else
-			return ((void)printf("Sorry cant handle this!\n"));
+		{
+			buf = wraper_sign(data, input, &i);
+			append_token(data, token, buf, UNKNOWN);
+		}
 	}
 }

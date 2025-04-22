@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 10:44:10 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 16:15:06 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static bool	check_buildin(t_data *data, char *cmd)
 static void	to_buildin(t_data *data, char *cmd, t_token **token)
 {
 	if (!ft_strcmp(cmd, "pwd"))
-		pwd_buildin();
+		pwd_buildin(data);
 	else if (!ft_strcmp(cmd, "env"))
 		env_buildin(data);
 	else if (!ft_strcmp(cmd, "cd"))
