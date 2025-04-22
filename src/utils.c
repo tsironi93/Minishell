@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 11:31:03 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 17:23:10 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ bool	check_files(t_data *data, t_token **token)
 			if (num_of_type(token, PIPE, NULLL) != 0)
 				return (true);
 			else
-				return (perror("Minishell: "), false);
+				return (perror("Minishell: "), data->exit_code = 1, false);
 		}
 		current = current->next;
 	}

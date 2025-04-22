@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 16:15:06 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/22 17:42:36 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
 			return (path);
 		dirs++;
 	}
+	data->exit_code = 127;
 	printf("minishell: %s: command not found\n", tmp_cmd);
 	return (NULL);
 }
@@ -106,7 +107,7 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		else
 		{
 			execve(cmd_path, cmd, data->env_full);
-			exit (errno);
+			exit (data->exit_code = errno);
 			perror("execve failed\n");
 		}
 	}
