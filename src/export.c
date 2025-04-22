@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:51 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/19 14:49:57 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/22 18:18:30 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,8 @@ int export_builtin(t_data *data, t_env **env, t_token **token)
 		{
 			if (cur->type == ARGS && is_valid_identifier("export", cur->value))
 				update_export(env, cur);
+			else
+				return (data->exit_code = 1);
 			cur = cur->next;
 		}
 		free2d(data->env_full);
