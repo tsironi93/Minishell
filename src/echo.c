@@ -6,15 +6,11 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/19 14:42:27 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/21 15:10:18 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
-
-/* 
-echo hallo       -n
-hallo -n */
 
 static int	_is_valid_n(char *str)
 {
@@ -23,7 +19,7 @@ static int	_is_valid_n(char *str)
 	if (!str || str[0] != '-')
 		return (0);
 	i = 1;
-	while(str[i])
+	while (str[i])
 	{
 		if (str[i] != 'n')
 			return (0);
@@ -34,33 +30,28 @@ static int	_is_valid_n(char *str)
 
 int	echo_builtin(t_data *data, t_token **token)
 {
-	t_token *cur;
+	t_token	*cur;
 	int		new_line;
 
 	data->exit_code = 0;
 	cur = *token;
 	new_line = 1;
-	// skip echo command
 	while (cur && cur->type != ARGS)
 		cur = cur->next;
-	// check for -n flag
 	while (cur && (cur->type == ARGS || cur->type == ISSPACE))
-    {
-        if (_is_valid_n(cur->value))
-            new_line = 0;
-        if (cur->type == ARGS && !_is_valid_n(cur->value))
-            break ;
-        cur = cur->next;
-    }
-    // print args
-    while (cur && cur->type != PIPE)
-    {
-        if (cur->type == ARGS)
-        {
-            printf("%s", cur->value);
-            if (cur->next && cur->next->type == ISSPACE)
-                printf(" ");
-        }
+	{
+		if (_is_valid_n(cur->value))
+			new_line = 0;
+		if (cur->type == ARGS && !_is_valid_n(cur->value))
+			break ;
+		cur = cur->next;
+	}
+	while (cur && cur->type != PIPE)
+	{
+		if (cur->type == ARGS)
+			printf("%s", cur->value);
+		if (cur->next && cur->next->type == ISSPACE)
+			printf(" ");
 		cur = cur->next;
 	}
 	if (new_line)

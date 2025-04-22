@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/19 14:36:17 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:40:28 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,15 +24,13 @@ int	main(int ac, char **av, char **envp)
 			data.input = gc_readline(&data.gc, "~>:");
 		else
 		{
-			char	*line;
-			line = get_next_line(fileno(stdin));
-			data.input = ft_strtrim(line, "\n");
-			free(line);
+			// line = get_next_line(fileno(stdin));
+			data.input = get_next_line(fileno(stdin));
 		}
 		if (!data.input)
 		{
-			if (isatty(fileno(stdin)))
-				printf("exit\n");
+			//if (isatty(fileno(stdin)))
+				//printf("exit\n");
 			clean(&data, true);
 			exit(data.exit_code);
 		}
@@ -41,8 +39,9 @@ int	main(int ac, char **av, char **envp)
 		lexer(&data, data.input, &data.tokens);
 		if (!classify_tokens(&data.tokens))
 			continue ;
+		// print_tokens(&data.tokens);
 		expansion(&data.tokens, &data);
-		 // print_tokens(&data.tokens);
+		// print_tokens(&data.tokens);
 		merge(&data, &data.tokens);
 		if (!check_files(&data, &data.tokens))
 			continue ;

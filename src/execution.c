@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/19 14:33:55 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/22 10:44:10 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,10 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		if (!redirections(data, token, true))
 			return ;
 		if (check_buildin(data, temp->value))
+		{
 			to_buildin(data, temp->value, &temp);
+			exit (data->exit_code);
+		}
 		else
 		{
 			execve(cmd_path, cmd, data->env_full);

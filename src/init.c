@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/19 18:50:54 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/21 13:11:43 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ static void	init_env(t_data *data, char **envp)
 
 void	init(int ac, char **av, char **envp, t_data *data)
 {
-	atexit(check_leaks);
+	//atexit(check_leaks);
 	(void)ac;
 	(void)av;
 	data->gc = gc_new();
