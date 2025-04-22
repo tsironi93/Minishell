@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/22 14:52:05 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/22 15:14:02 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,9 @@ int	echo_builtin(t_data *data, t_token **token)
 {
 	t_token	*cur;
 	int		new_line;
+	bool	space_flag;
 
+	space_flag = false;
 	data->exit_code = 0;
 	cur = *token;
 	new_line = 1;
@@ -46,20 +48,25 @@ int	echo_builtin(t_data *data, t_token **token)
 			break ;
 		cur = cur->next;
 	}
-    while (cur && cur->type != PIPE)
-    {
-        if (cur->type == ARGS)
-        {
-            if (!ft_strcmp(cur->value, "~"))
-                printf("%s", getenv("HOME"));
-            else
-                printf("%s", cur->value);
-            if (cur->next && cur->next->type == ISSPACE)
-                printf(" ");
-        }
-        cur = cur->next;
-    }
-    if (new_line)
-        printf("\n");
+	while (cur && cur->type != PIPE)
+	{
+		if (cur->type == ARGS)
+		{
+			if (space_flag)
+			{
+				printf(" ");
+				space_flag = false;
+			}
+			if (!ft_strcmp(cur->value, "~"))
+				printf("%s", getenv("HOME"));
+			else
+				printf("%s", cur->value);
+			if (cur->next && cur->next->type == ISSPACE)
+				space_flag = true;
+		}
+		cur = cur->next;
+	}
+	if (new_line)
+		printf("\n");
 	return (data->exit_code);
 }
