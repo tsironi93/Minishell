@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:36:51 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 11:58:25 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,6 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 	temp = search_tokens(token, COMMAND);
 	if (num_of_type(&data->tokens, COMMAND, NULLL) != 1)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGTSTP, SIG_DFL);
 		if (!redirections(data, token, true))
 			return ;
 		if (check_buildin(data, temp->value))
@@ -112,8 +110,6 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			exit (data->exit_code);
 			perror("execve failed\n");
 		}
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_DFL);
 	}
 	else
 	{

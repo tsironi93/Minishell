@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 15:36:48 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/24 16:36:32 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:59:35 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,13 @@ void	handle_pipeline(t_data *data, int num_pipes)
 		pid[i] = fork();
 		if (pid[i] < 0)
 			return ((void)perror("fork"));
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		if (pid[i] == 0)
 			redirect_pipe(fd, num_pipes, i, data);
 	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, sigint_handler);
 	close_fds(fd, num_pipes);
 	i = -1;
 	while (++i < num_pipes + 1)
