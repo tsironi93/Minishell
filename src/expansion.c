@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 12:34:19 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 13:04:35 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,8 @@ void	expansion(t_token **token, t_data *data)
 			|| temp->type == APPEND_FILENAME_OUT || temp->type == HERE_DOC_OPT)
 		{
 			if (!ft_strcmp(temp->value, "$") && temp->next && (temp->next->type
-				== DOUBLE_QUOTES || temp->next->type == SINGLE_QUOTES))
+				== DOUBLE_QUOTES || temp->next->type == SINGLE_QUOTES)
+				&& ft_strcmp(temp->next->value, "$"))
 				dq_expansion(temp);
 			if (ft_strchr(temp->value, '$'))
 			{
