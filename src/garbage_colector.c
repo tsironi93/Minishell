@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   garbage_colector.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:26:35 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/06 14:16:01 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:26:56 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,8 +110,9 @@ void	gc_collect(t_gc *gc)
 // Initialize the t_gc
 t_gc	gc_new(void)
 {
-	t_gc	gc = {0};
+	t_gc	gc;
 
+	gc = {0};
 	return (gc);
 }
 

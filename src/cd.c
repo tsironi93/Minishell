@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/23 20:34:03 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:34:04 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ char	*ft_getenv(t_env **env, char *var)
 	cur = *env;
 	while (cur)
 	{
-		if (!ft_strncmp(cur->str, var, ft_strlen(var)) && cur->str[ft_strlen(var)] == '=')
+		if (!ft_strncmp(cur->str, var, ft_strlen(var))
+			&& cur->str[ft_strlen(var)] == '=')
 		{
 			return (cur->str + ft_strlen(var) + 1);
 		}
@@ -94,7 +95,8 @@ static int	cd_helper(t_data *data, char *next_dir, bool flag)
 	{
 		next_dir_expand = ft_getenv(&data->env, next_dir);
 		if (!ft_strcmp(next_dir_expand, ""))
-			return (printf("minishell: cd: %s not set\n", next_dir), data->exit_code = 1);
+			return (printf("minishell: cd: %s not set\n", next_dir),
+				data->exit_code = 1);
 		if (!ft_strcmp(next_dir, "OLDPWD"))
 			printf("%s\n", ft_getenv(&data->env, next_dir));
 	}
@@ -110,7 +112,6 @@ static int	cd_helper(t_data *data, char *next_dir, bool flag)
 	data->exit_code = 0;
 	return (data->exit_code);
 }
-
 
 int	cd_buildin(t_data *data, t_token **token)
 {
@@ -128,8 +129,8 @@ int	cd_buildin(t_data *data, t_token **token)
 			return (cd_helper(data, gc_strjoin(&data->gc, "/Users/",
 						cur->value + 1), false));
 		else
-			return (cd_helper(data, gc_strjoin(&data->gc, ft_getenv(&data->env, "HOME"),
-						(cur->value + 1)), false));
+			return (cd_helper(data, gc_strjoin(&data->gc, ft_getenv(&data->env,
+							"HOME"), (cur->value + 1)), false));
 	}
 	else if (!ft_strcmp(cur->value, "-"))
 		return (cd_helper(data, "OLDPWD", true));

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 10:25:39 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 11:38:17 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	init_env(t_data *data, char **envp)
 		if (!ft_strncmp(envp[i], "SHLVL=", 6))
 			update_env_value(data, envp[i]);
 		else if (!ft_strncmp(envp[i], "OLDPWD=", 7))
-			continue;
+			continue ;
 		else
 			append_node(&data->env, envp[i]);
 	}
@@ -69,7 +69,7 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	//atexit(check_leaks);
 	(void)ac;
 	(void)av;
-
+	disable_echoctl();
 	data->gc = gc_new();
 	data->env = NULL;
 	data->tokens = NULL;
@@ -81,6 +81,4 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	signal(SIGINT, sigint_handler);
 	signal(SIGTSTP, sigtstp_handler);
 	signal(SIGCHLD, sigchld_handler);
-	//signal(SIGQUIT, SIG_IGN);
-	// printf(CYAN "\n\n\t\tHello Malaka\n\n");
 }

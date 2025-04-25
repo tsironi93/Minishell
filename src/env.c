@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:25:32 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/23 21:09:35 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 11:34:51 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ int	env_buildin(t_data *data, t_token **token)
 	if (!data->env)
 		return (data->exit_code = 1);
 	if (num_of_type(token, ARGS, PIPE) < 2 && !search_tokens(token, PIPE))
-		return data->exit_code = 1;
+		return (data->exit_code = 1);
 	cur = data->env;
 	while (cur)
 	{

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 10:36:46 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 11:36:51 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,9 +145,9 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			if (WIFEXITED(status))
 				data->exit_code = WEXITSTATUS(status);
 			else if (WIFSIGNALED(status))
-				data->exit_code = 128 + WTERMSIG(status); // for signals like Ctrl-C
+				data->exit_code = 128 + WTERMSIG(status);
 			else
-				data->exit_code = 1; // fallback for other cases
+				data->exit_code = 1;
 		}
 	}
 	cmd = NULL;

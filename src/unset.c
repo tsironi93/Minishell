@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 17:25:59 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/14 19:09:20 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 11:31:22 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	update_unset(t_env **env, t_token *token)
 	}
 }
 
-int unset_builtin(t_data *data, t_env **env, t_token **token)
+int	unset_builtin(t_data *data, t_env **env, t_token **token)
 {
 	t_token	*cur;
 
