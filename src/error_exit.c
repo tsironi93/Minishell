@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/29 17:03:34 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 10:22:42 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 15:57:38 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	clean(t_data *data, bool exit_)
 {
-	//free (data->input);
 	gc_collect(&data->gc);
 	data->tokens = NULL;
 	if (exit_)
 	{
 		restore_terminal();
-		//free_env(&data->env);
+		free2d(data->buildins);
+		free_env(&data->env);
 		gc_destroy(&data->gc);
 		clear_history();
 	}
@@ -38,16 +38,3 @@ void	free2d(char **a)
 	}
 	free(a);
 }
-
-/*void	free_fds(t_data *data)
-{
-	if (data->input_fd)
-		free(data->input_fd);
-	if (data->append_fd)
-		free(data->append_fd);
-	if (data->output_fd)
-		free(data->output_fd);
-	data->input_fd = NULL;
-	data->output_fd = NULL;
-	data->append_fd = NULL;
-}*/

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/22 15:14:02 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 14:41:00 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static int	_is_valid_n(char *str)
 	int	i;
 
 	if (!str || str[0] != '-')
+		return (0);
+	if (str[0] == '-' && !str[1])
 		return (0);
 	i = 1;
 	while (str[i])

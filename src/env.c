@@ -6,11 +6,34 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:25:32 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/25 11:34:51 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 15:50:27 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+t_env	*copy_env_list(t_env *env)
+{
+	t_env	*copy = NULL;
+	t_env	*new_node;
+	t_env	*last = NULL;
+
+	while (env)
+	{
+		new_node = malloc(sizeof(t_env));
+		if (!new_node)
+			return (NULL);
+		new_node->str = strdup(env->str);
+		new_node->next = NULL;
+		if (!copy)
+			copy = new_node;
+		else
+			last->next = new_node;
+		last = new_node;
+		env = env->next;
+	}
+	return (copy);
+}
 
 void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd)
 {
@@ -64,8 +87,8 @@ int	env_buildin(t_data *data, t_token **token)
 
 	if (!data->env)
 		return (data->exit_code = 1);
-	if (num_of_type(token, ARGS, PIPE) < 2 && !search_tokens(token, PIPE))
-		return (data->exit_code = 1);
+	if (num_of_type(token, ARGS, PIPE) > 0 && !search_tokens(token, PIPE))
+	 	return (data->exit_code = 1);
 	cur = data->env;
 	while (cur)
 	{

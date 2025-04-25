@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   classify.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:29:14 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/24 11:51:12 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:19:48 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static bool	find_file(t_data *data, t_token **token, t_token_type type)
 		return (ft_putstr_fd("minishell: syntax error near unexpected token ",
 				2), ft_putendl_fd("`newline'", 2), data->exit_code = 2, false);
 	cur = cur->next;
-	if (!cur->next)
+	if (cur->type == ISSPACE && !cur->next)
 		return (ft_putstr_fd("minishell: syntax error near unexpected token ",
 				2), ft_putendl_fd("`newline'", 2), data->exit_code = 2, false);
 	while (cur && cur->type == ISSPACE)
@@ -29,8 +29,9 @@ static bool	find_file(t_data *data, t_token **token, t_token_type type)
 	if (cur->type == UNKNOWN || cur->type == DOUBLE_QUOTES
 		|| cur->type == SINGLE_QUOTES)
 		cur->type = type + 1;
-	else if (cur->type == APPEND || cur->type == REDIRECT_INP
-		|| cur->type == REDIRECT_OUT || cur->type == HERE_DOC)
+	// else (cur->type == APPEND || cur->type == REDIRECT_INP
+	// 	|| cur->type == REDIRECT_OUT || cur->type == HERE_DOC)
+	else
 		return (ft_putendl_fd("minishell: syntax error near unexpected token",
 				2), data->exit_code = 2, false);
 	return (true);

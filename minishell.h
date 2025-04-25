@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 12:53:14 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:56:56 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,14 +124,13 @@ void	clean(t_data *data, bool exit_);
 void	go_at_start(t_token **token);
 bool	check_files(t_data *data, t_token **token);
 char	*trim_to_del(t_data *data, char *str, char del);
-void	sort_export(char ***table, int env_count);
+t_env	*copy_env_list(t_env *env);
 
 //-----------------------------FREE/ERROR-------------------------------//
 
 void	free_env(t_env **head);
 void	free_linked(t_token *head);
 void	free2d(char **a);
-void	free_fds(t_data *data);
 void	*gc_malloc(t_gc *gc, size_t size);
 void	gc_destroy(t_gc *gc);
 t_gc	gc_new(void);
@@ -180,7 +179,7 @@ int		pwd_buildin(t_data *data);
 int		cd_buildin(t_data *data, t_token **token);
 void	env_reconstr(t_data *data, char ***env_full);
 int		export_builtin(t_data *data, t_env **env, t_token **token);
-int		is_valid_identifier(char *cmd, char *str);
+int		is_valid_identifier(t_data *data, char *cmd, char *str);
 void	update_env(t_data *data, t_env *env, char *prev_pwd, char *next_pwd);
 int		unset_builtin(t_data *data, t_env **env, t_token **token);
 int		exit_builtin(t_data *data, t_token **token);

@@ -6,11 +6,38 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:51 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/25 09:45:29 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 16:56:26 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
+
+static void	sort_export(t_env **env)
+{
+	t_env	*cur;
+	char	*temp;
+	int		is_sorted;
+
+	if (!env)
+		return ;
+	is_sorted = 0;
+	while (!is_sorted)
+	{
+		is_sorted = 1;
+		cur = *env;
+		while (cur->next)
+		{
+			if (ft_strcmp(cur->str, cur->next->str) > 0)
+			{
+				temp = cur->str;
+				cur->str = cur->next->str;
+				cur->next->str = temp;
+				is_sorted = 0;
+			}
+			cur = cur->next;
+		}
+	}
+}
 
 static void	update_export(t_env **env, t_token *token)
 {
@@ -34,25 +61,25 @@ static void	update_export(t_env **env, t_token *token)
 	append_node(env, token->value);
 }
 
-int	is_valid_identifier(char *cmd, char *str)
+int	is_valid_identifier(t_data *data, char *cmd, char *str)
 {
 	int	i;
 
 	i = 0;
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+		return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
 			ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
 			ft_putendl_fd("': not a valid identifier", 2), 0);
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+			return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
 				ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
 				ft_putendl_fd("': not a valid identifier", 2), 0);
 		i++;
 	}
 	if (!ft_strcmp(cmd, "unset") && str[i] == '=')
-		return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+		return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
 			ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
 			ft_putendl_fd("': not a valid identifier", 2), 0);
 	return (1);
@@ -62,8 +89,11 @@ static void	print_export(t_env **env)
 {
 	t_env	*cur;
 	char	**temp;
+	t_env	*envcopy;
 
-	cur = *env;
+	envcopy = copy_env_list(*env);
+	sort_export(&envcopy);
+	cur = envcopy;
 	while (cur)
 	{
 		temp = ft_split(cur->str, '=');
@@ -74,6 +104,7 @@ static void	print_export(t_env **env)
 		free2d(temp);
 		cur = cur->next;
 	}
+	free_env(&envcopy);
 }
 
 int	export_builtin(t_data *data, t_env **env, t_token **token)
@@ -89,7 +120,7 @@ int	export_builtin(t_data *data, t_env **env, t_token **token)
 		{
 			if (cur->type == ARGS)
 			{
-				if (is_valid_identifier("export", cur->value))
+				if (is_valid_identifier(data, "export", cur->value))
 					update_export(env, cur);
 				else
 					return (data->exit_code = 1);

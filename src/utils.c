@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/21 15:38:44 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 17:23:10 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 17:01:58 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ bool	check_files(t_data *data, t_token **token)
 	current = *token;
 	while (current)
 	{
-		if (current->type == COMMAND)
+		if (current->type == COMMAND || current->type == COMMAND_EX)
 			cmd++;
 		if (current->type == PIPE)
 			pipe++;
@@ -73,7 +73,7 @@ bool	check_files(t_data *data, t_token **token)
 		current = current->next;
 	}
 	if (cmd <= pipe)
-		return (redirections(data, token, false), false);
+		return (data->exit_code = 2, redirections(data, token, false), false);
 	return (true);
 }
 

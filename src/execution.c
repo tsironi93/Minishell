@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:58:25 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 16:32:14 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
 		dirs++;
 	}
 	data->exit_code = 127;
-	if (errno == ENOENT)
 		perror("command not found");
 	return (NULL);
 }
@@ -168,7 +167,7 @@ void	try_to_exec(t_data *data, t_token **token)
 			break ;
 		temp = temp->next;
 	}
-	if (!temp)
+	if (!temp || !ft_strcmp(temp->value, ""))
 		return ;
 	if (temp->type == COMMAND_EX)
 		flag = true;
