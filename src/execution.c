@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/23 20:59:54 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:36:46 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,8 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			exit (data->exit_code);
 			perror("execve failed\n");
 		}
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_DFL);
 	}
 	else
 	{
@@ -123,10 +125,10 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			return ;
 		}
 		pid = fork();
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		if (pid == 0)
 		{
-			signal(SIGINT, SIG_DFL);
-			signal(SIGTSTP, SIG_DFL);
 			if (!redirections(data, token, true))
 				return ;
 			execve(cmd_path, cmd, data->env_full);
@@ -135,6 +137,8 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		}
 		else if (pid > 0)
 		{
+			signal(SIGQUIT, SIG_IGN);
+			signal(SIGINT, sigint_handler);
 			g_child_pid = pid;
 			waitpid(pid, &status, 0);
 			g_child_pid = -1;

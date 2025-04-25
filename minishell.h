@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/24 11:26:26 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:00:01 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,8 @@ void	_expand_variables(t_data *data, char *input, char **exp_result);
 void	sigint_handler(int sig);
 void	sigtstp_handler(int sig);
 void	sigchld_handler(int sig);
+void 	restore_terminal(void);
+void	disable_echoctl(void);
 
 //----------------------------EXECUTION---------------------------------//
 

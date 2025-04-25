@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/23 17:43:55 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:25:39 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	//atexit(check_leaks);
 	(void)ac;
 	(void)av;
+
 	data->gc = gc_new();
 	data->env = NULL;
 	data->tokens = NULL;
@@ -80,5 +81,6 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	signal(SIGINT, sigint_handler);
 	signal(SIGTSTP, sigtstp_handler);
 	signal(SIGCHLD, sigchld_handler);
+	//signal(SIGQUIT, SIG_IGN);
 	// printf(CYAN "\n\n\t\tHello Malaka\n\n");
 }

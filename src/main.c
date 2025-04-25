@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/24 16:28:29 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 10:21:18 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	main(int ac, char **av, char **envp)
 {
 	t_data	data;
 
+	disable_echoctl();
 	init(ac, av, envp, &data);
 	while ("Malaka")
 	{
