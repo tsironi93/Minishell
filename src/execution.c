@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 17:42:36 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/23 20:59:54 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	to_buildin(t_data *data, char *cmd, t_token **token)
 	if (!ft_strcmp(cmd, "pwd"))
 		pwd_buildin(data);
 	else if (!ft_strcmp(cmd, "env"))
-		env_buildin(data);
+		env_buildin(data, token);
 	else if (!ft_strcmp(cmd, "cd"))
 		cd_buildin(data, token);
 	else if (!ft_strcmp(cmd, "export"))
@@ -65,7 +65,8 @@ static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
 		dirs++;
 	}
 	data->exit_code = 127;
-	printf("minishell: %s: command not found\n", tmp_cmd);
+	if (errno == ENOENT)
+		perror("command not found");
 	return (NULL);
 }
 
@@ -107,7 +108,8 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		else
 		{
 			execve(cmd_path, cmd, data->env_full);
-			exit (data->exit_code = errno);
+			data->exit_code = WEXITSTATUS(status);
+			exit (data->exit_code);
 			perror("execve failed\n");
 		}
 	}
@@ -136,9 +138,13 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 			g_child_pid = pid;
 			waitpid(pid, &status, 0);
 			g_child_pid = -1;
+			if (WIFEXITED(status))
+				data->exit_code = WEXITSTATUS(status);
+			else if (WIFSIGNALED(status))
+				data->exit_code = 128 + WTERMSIG(status); // for signals like Ctrl-C
+			else
+				data->exit_code = 1; // fallback for other cases
 		}
-		waitpid(pid, &status, 0);
-		data->exit_code = WEXITSTATUS(status);
 	}
 	cmd = NULL;
 }

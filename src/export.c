@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:51 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/22 18:18:30 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 09:45:29 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,25 @@ static void	update_export(t_env **env, t_token *token)
 
 int	is_valid_identifier(char *cmd, char *str)
 {
-	int i = 0;
+	int	i;
 
+	i = 0;
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (printf("Minishell: %s: `%s': not a valid identifier\n",cmd, str), 0);
+		return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+			ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
+			ft_putendl_fd("': not a valid identifier", 2), 0);
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-		return (printf("Minishell: %s: `%s': not a valid identifier\n",cmd, str), 0);
+			return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+				ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
+				ft_putendl_fd("': not a valid identifier", 2), 0);
 		i++;
 	}
 	if (!ft_strcmp(cmd, "unset") && str[i] == '=')
-		return (printf("Minishell: %s: `%s': not a valid identifier\n",cmd, str), 0);
+		return (ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+			ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
+			ft_putendl_fd("': not a valid identifier", 2), 0);
 	return (1);
 }
 
@@ -69,7 +76,7 @@ static void	print_export(t_env **env)
 	}
 }
 
-int export_builtin(t_data *data, t_env **env, t_token **token)
+int	export_builtin(t_data *data, t_env **env, t_token **token)
 {
 	t_token	*cur;
 
@@ -80,10 +87,13 @@ int export_builtin(t_data *data, t_env **env, t_token **token)
 	{
 		while (cur && cur->type != PIPE)
 		{
-			if (cur->type == ARGS && is_valid_identifier("export", cur->value))
-				update_export(env, cur);
-			else
-				return (data->exit_code = 1);
+			if (cur->type == ARGS)
+			{
+				if (is_valid_identifier("export", cur->value))
+					update_export(env, cur);
+				else
+					return (data->exit_code = 1);
+			}
 			cur = cur->next;
 		}
 		free2d(data->env_full);
@@ -91,4 +101,3 @@ int export_builtin(t_data *data, t_env **env, t_token **token)
 	}
 	return (data->exit_code = 0);
 }
-

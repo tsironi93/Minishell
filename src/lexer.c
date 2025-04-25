@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 16:25:49 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/24 16:35:56 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ void	lexer(t_data *data, char *input, t_token **token)
 {
 	int		i;
 	char	*buf;
+	char	buffer[2];
 
 	i = 0;
 	while (input[i])
@@ -105,9 +106,9 @@ void	lexer(t_data *data, char *input, t_token **token)
 		}
 		else if (input[i] == '\\' && input[i + 1])
 		{
-			buf[0] = input[i + 1];
-			buf[1] = '\0';
-			append_token(data, token, buf, SINGLE_QUOTES);
+			buffer[0] = input[i + 1];
+			buffer[1] = '\0';
+			append_token(data, token, buffer, SINGLE_QUOTES);
 			i += 2;
 		}
 		else if (ft_isalnum(input[i]) || input[i] == '$' || input[i] == '.'

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/22 16:39:40 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/23 20:34:03 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,39 +69,48 @@ static int	up_a_level(t_data *data, t_token *cur)
 	return (data->exit_code);
 }
 
-/* bash-3.2$ ./minishell
-~>:cd -
+char	*ft_getenv(t_env **env, char *var)
+{
+	t_env	*cur;
 
+	cur = *env;
+	while (cur)
+	{
+		if (!ft_strncmp(cur->str, var, ft_strlen(var)) && cur->str[ft_strlen(var)] == '=')
+		{
+			return (cur->str + ft_strlen(var) + 1);
+		}
+		cur = cur->next;
+	}
+	return ("");
+}
 
-        -------->DEBUG<-------
-
-cd: Bad address
-~>:cd ..
-~>:cd --
-cd: No such file or directory
-~>:cd -
-
-
-        -------->DEBUG<-------
-
-cd: Bad address
-~>: */
-
-static int	cd_helper(t_data *data, char *next_dir)
+static int	cd_helper(t_data *data, char *next_dir, bool flag)
 {
 	char	*tmp;
+	char	*next_dir_expand;
 
+	if (flag)
+	{
+		next_dir_expand = ft_getenv(&data->env, next_dir);
+		if (!ft_strcmp(next_dir_expand, ""))
+			return (printf("minishell: cd: %s not set\n", next_dir), data->exit_code = 1);
+		if (!ft_strcmp(next_dir, "OLDPWD"))
+			printf("%s\n", ft_getenv(&data->env, next_dir));
+	}
+	else
+		next_dir_expand = next_dir;
 	tmp = getcwd(NULL, 0);
 	if (!tmp)
 		return (perror("getcwd"), data->exit_code = 1, data->exit_code);
-	if (chdir(next_dir) != 0)
-		return (perror("cd"), free(tmp), data->exit_code = 1,
-			data->exit_code);
-	update_env(data, data->env, tmp, next_dir);
+	if (chdir(next_dir_expand) != 0)
+		return (perror("cd"), free(tmp), data->exit_code = 1);
+	update_env(data, data->env, tmp, next_dir_expand);
 	free(tmp);
 	data->exit_code = 0;
 	return (data->exit_code);
 }
+
 
 int	cd_buildin(t_data *data, t_token **token)
 {
@@ -109,21 +118,23 @@ int	cd_buildin(t_data *data, t_token **token)
 
 	cur = search_tokens(token, ARGS);
 	create_oldpwd(&data->env);
-	if (num_of_type(token, ARGS, PIPE) == 0)
-		return (cd_helper(data, getenv("HOME")));
-	if (!ft_strncmp(cur->value, "~", 1))
+	if (num_of_type(token, ARGS, PIPE) == 0 || !ft_strcmp(cur->value, "--"))
+		return (cd_helper(data, "HOME", true));
+	else if (!ft_strncmp(cur->value, "~", 1))
 	{
-		if (cur->value[1] != '/')
+		if (!ft_strcmp(cur->value, "~"))
+			return (cd_helper(data, "HOME", true));
+		else if (cur->value[1] != '/')
 			return (cd_helper(data, gc_strjoin(&data->gc, "/Users/",
-						cur->value + 1)));
+						cur->value + 1), false));
 		else
-			return (cd_helper(data, gc_strjoin(&data->gc, getenv("HOME"),
-						(cur->value + 1))));
+			return (cd_helper(data, gc_strjoin(&data->gc, ft_getenv(&data->env, "HOME"),
+						(cur->value + 1)), false));
 	}
 	else if (!ft_strcmp(cur->value, "-"))
-		return (cd_helper(data, getenv("OLDPWD")));
+		return (cd_helper(data, "OLDPWD", true));
 	else if (!ft_strncmp(cur->value, "/", 1))
-		return (cd_helper(data, cur->value));
+		return (cd_helper(data, cur->value, false));
 	else if (!ft_strncmp(cur->value, "..", 2))
 		return (up_a_level(data, cur));
 	else

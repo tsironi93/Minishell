@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 12:21:21 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/24 17:01:06 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,21 @@ char	*_find_env_path(char **env_list, char *search_key)
 	return (search_key);
 }
 
-static void	_append_expansion(char **arg, char **name)
+static void	_append_expansion(t_data *data, char **arg, char **name)
 {
 	char	*temp;
 
 	if (*name == NULL)
-		*name = ft_strjoin("", *arg);
+		*name = gc_strjoin(&data->gc, "", *arg);
 	else
 	{
 		temp = *name;
-		*name = ft_strjoin(temp, *arg);
+		*name = gc_strjoin(&data->gc, temp, *arg);
 	}
-	// printf("%s\n", *name);
 	*arg = "";
 }
 
-static void	_expand_variables(t_data *data, char *input, char **exp_result)
+void	_expand_variables(t_data *data, char *input, char **exp_result)
 {
 	char	buffer[256];
 	int		i;
@@ -79,12 +78,12 @@ static void	_expand_variables(t_data *data, char *input, char **exp_result)
 		if (pos > 0)
 		{
 			arg = gc_strdup(&data->gc, buffer);
-			_append_expansion(&arg, exp_result);
+			_append_expansion(data, &arg, exp_result);
 		}
 		if (input[i] == '$' && input[i + 1] == '?')
 		{
 			arg = ft_itoa(data->exit_code);
-			_append_expansion(&arg, exp_result);
+			_append_expansion(data, &arg, exp_result);
 			i += 2;
 			continue ;
 		}
@@ -95,7 +94,7 @@ static void	_expand_variables(t_data *data, char *input, char **exp_result)
 			buffer[pos++] = input[i++];
 		buffer[pos] = '\0';
 		arg = gc_strdup(&data->gc, _find_env_path(data->env_full, buffer));
-		_append_expansion(&arg, exp_result);
+		_append_expansion(data, &arg, exp_result);
 	}
 }
 
@@ -108,8 +107,9 @@ void	expansion(t_token **token, t_data *data)
 	while (temp)
 	{
 		str = NULL;
-		if (temp->type == COMMAND || temp->type == DOUBLE_QUOTES
-			|| temp->type == ARGS)
+		if (temp->type == COMMAND || temp->type == DOUBLE_QUOTES || temp->type == ARGS
+			|| temp->type == FILENAME_INP || temp->type == APPEND_FILENAME_OUT
+			|| temp->type == APPEND_FILENAME_OUT || temp->type == HERE_DOC_OPT)
 		{
 			if (!ft_strcmp(temp->value, "$") && temp->next->type == DOUBLE_QUOTES)
 				dq_expansion(temp);

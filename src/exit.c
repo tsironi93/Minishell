@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:18:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/18 17:32:33 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/24 15:11:25 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static void	exit_param(t_data *data, char *str)
 	{
 		if (!ft_isdigit(str[i++]))
 		{
-			printf("minishell: exit: %s: numeric argument required\n", str);
+			ft_putstr_fd("minishell: exit: numeric argument required", 2);
 			data->exit_code = 255;
 			clean(data, true);
 			exit(data->exit_code);
@@ -35,11 +35,11 @@ int	exit_builtin(t_data *data, t_token **token)
 {
 	t_token	*cur;
 
-	printf("exit\n");
+	ft_putendl_fd("exit", 2);
 	if (num_of_type(token, ARGS, PIPE) > 1)
 	{
-		printf("minishell: exit: too many arguments\n");
-		return (data->exit_code = 1);
+		ft_putendl_fd("minishell: exit: too many arguments", 2);
+		exit (data->exit_code = 1);
 	}
 	if (num_of_type(token, ARGS, PIPE) == 1)
 	{

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:25:32 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/19 16:30:12 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/23 21:09:35 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,19 @@ void	env_reconstr(t_data *data, char ***env_full)
 	(*env_full)[i + 1] = NULL;
 }
 
-int	env_buildin(t_data *data)
+int	env_buildin(t_data *data, t_token **token)
 {
 	t_env	*cur;
 
 	if (!data->env)
 		return (data->exit_code = 1);
+	if (num_of_type(token, ARGS, PIPE) < 2 && !search_tokens(token, PIPE))
+		return data->exit_code = 1;
 	cur = data->env;
 	while (cur)
 	{
-		printf("%s\n", cur->str);
+		if (ft_strchr(cur->str, '='))
+			printf("%s\n", cur->str);
 		cur = cur->next;
 	}
 	return (data->exit_code = 0);

@@ -6,15 +6,16 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/14 12:34:45 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/23 13:32:59 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static void	_heredoc(char *del, int fd)
+static void	_heredoc(t_data *data, char *del, int fd)
 {
 	char	*line;
+	char	*expanded_line;
 
 	while ("Grapse Malaka")
 	{
@@ -24,7 +25,18 @@ static void	_heredoc(char *del, int fd)
 			free (line);
 			break ;
 		}
-		ft_putendl_fd(line, fd);
+		if (ft_strchr(line, '$'))
+		{
+			_expand_variables(data, line, &expanded_line);
+			if (!ft_strcmp(expanded_line, del))
+			{
+				free (line);
+				break ;
+			}
+			ft_putendl_fd(expanded_line, fd);
+		}
+		else
+			ft_putendl_fd(line, fd);
 		free (line);
 	}
 	close (fd);
@@ -66,7 +78,7 @@ static void	heredoc_init(t_data *data, t_heredoc *heredoc, bool flag)
 		if (pid == 0)
 		{
 			close(heredoc->fd[i][0]);
-			_heredoc(heredoc->del[i], heredoc->fd[i][1]);
+			_heredoc(data, heredoc->del[i], heredoc->fd[i][1]);
 		}
 		else
 		{

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 16:07:47 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/24 16:28:29 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,15 @@ int	main(int ac, char **av, char **envp)
 			clean(&data, true);
 			exit(data.exit_code);
 		}
-		if (isatty(fileno(stdin)))
+		if (data.input && isatty(fileno(stdin)))
 			add_history(data.input);
 		lexer(&data, data.input, &data.tokens);
-		if (!classify_tokens(&data.tokens))
-			continue ;
 		// print_tokens(&data.tokens);
+		if (!classify_tokens(&data, &data.tokens))
+			continue ;
 		expansion(&data.tokens, &data);
 		merge(&data, &data.tokens);
-		//print_tokens(&data.tokens);
+		// print_tokens(&data.tokens);
 		if (!check_files(&data, &data.tokens))
 			continue ;
 		if (num_of_type(&data.tokens, PIPE, NULLL))

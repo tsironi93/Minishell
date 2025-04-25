@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/22 16:14:48 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/24 11:26:26 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ typedef struct s_data
 {
 	t_token		*tokens;
 	char		**buildins;
+	char		***export_table;
 	t_gc		gc;
 	char		*input;
 	char		**env_full;
@@ -123,6 +124,7 @@ void	clean(t_data *data, bool exit_);
 void	go_at_start(t_token **token);
 bool	check_files(t_data *data, t_token **token);
 char	*trim_to_del(t_data *data, char *str, char del);
+void	sort_export(char ***table, int env_count);
 
 //-----------------------------FREE/ERROR-------------------------------//
 
@@ -152,8 +154,9 @@ int		num_of_type(t_token **token, t_token_type type, t_token_type until);
 void	init(int ac, char **av, char **envp, t_data *data);
 void	lexer(t_data *data, char *input, t_token **token);
 void	expansion(t_token **token, t_data *data);
-bool	classify_tokens(t_token **token);
+bool	classify_tokens(t_data *data, t_token **token);
 void	merge(t_data *data, t_token **token);
+void	_expand_variables(t_data *data, char *input, char **exp_result);
 
 //-----------------------------SIGNALS----------------------------------//
 
@@ -169,7 +172,7 @@ bool	redirections(t_data *data, t_token **token, bool flag);
 void	try_to_exec(t_data *data, t_token **token);
 
 //--------------------------BUILTINS-------------------------------//
-int		env_buildin(t_data *data);
+int		env_buildin(t_data *data, t_token **t_token);
 int		pwd_buildin(t_data *data);
 int		cd_buildin(t_data *data, t_token **token);
 void	env_reconstr(t_data *data, char ***env_full);
