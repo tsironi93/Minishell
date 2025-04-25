@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 10:00:01 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 12:53:14 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,7 @@ void	check_heredoc(t_data *data, t_token **token, bool flag);
 void	handle_pipeline(t_data *data, int num_pipes);
 bool	redirections(t_data *data, t_token **token, bool flag);
 void	try_to_exec(t_data *data, t_token **token);
+bool	check_quotes(char *input);
 
 //--------------------------BUILTINS-------------------------------//
 int		env_buildin(t_data *data, t_token **t_token);

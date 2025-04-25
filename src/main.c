@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:29:14 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/25 12:57:43 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	main(int ac, char **av, char **envp)
 			clean(&data, true);
 			exit(data.exit_code);
 		}
+		if (!check_quotes(data.input))
+			continue ;
 		if (data.input && isatty(fileno(stdin)))
 			add_history(data.input);
 		lexer(&data, data.input, &data.tokens);

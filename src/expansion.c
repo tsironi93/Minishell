@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 16:41:19 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/24 17:01:06 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/25 12:34:19 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ void	expansion(t_token **token, t_data *data)
 			|| temp->type == FILENAME_INP || temp->type == APPEND_FILENAME_OUT
 			|| temp->type == APPEND_FILENAME_OUT || temp->type == HERE_DOC_OPT)
 		{
-			if (!ft_strcmp(temp->value, "$") && temp->next->type == DOUBLE_QUOTES)
+			if (!ft_strcmp(temp->value, "$") && temp->next && (temp->next->type
+				== DOUBLE_QUOTES || temp->next->type == SINGLE_QUOTES))
 				dq_expansion(temp);
 			if (ft_strchr(temp->value, '$'))
 			{
