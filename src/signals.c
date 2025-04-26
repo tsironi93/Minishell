@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:33:49 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:25:36 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 15:02:04 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ void	restore_terminal(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-// Forward Ctrl+C to child
 void	sigint_handler(int sig)
 {
 	(void)sig;
@@ -48,7 +47,6 @@ void	sigint_handler(int sig)
 	}
 }
 
-// Forward Ctrl+Z to child
 void	sigtstp_handler(int sig)
 {
 	(void)sig;
@@ -58,9 +56,13 @@ void	sigtstp_handler(int sig)
 		printf("\n");
 }
 
-// Reap all dead children
 void	sigchld_handler(int sig)
 {
+	int	i;
+
+	i = 0;
 	(void)sig;
-	while (waitpid(-1, NULL, WNOHANG) > 0);
+	while (waitpid(-1, NULL, WNOHANG) > 0)
+		i++;
 }
+

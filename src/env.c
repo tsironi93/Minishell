@@ -6,24 +6,43 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 15:25:32 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/25 15:50:27 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 14:47:11 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
+char	*ft_getenv(t_env **env, char *var)
+{
+	t_env	*cur;
+
+	cur = *env;
+	while (cur)
+	{
+		if (!ft_strncmp(cur->str, var, ft_strlen(var))
+			&& cur->str[ft_strlen(var)] == '=')
+		{
+			return (cur->str + ft_strlen(var) + 1);
+		}
+		cur = cur->next;
+	}
+	return ("");
+}
+
 t_env	*copy_env_list(t_env *env)
 {
-	t_env	*copy = NULL;
+	t_env	*copy;
 	t_env	*new_node;
-	t_env	*last = NULL;
+	t_env	*last;
 
+	copy = NULL;
+	last = NULL;
 	while (env)
 	{
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return (NULL);
-		new_node->str = strdup(env->str);
+		new_node->str = ft_strdup(env->str);
 		new_node->next = NULL;
 		if (!copy)
 			copy = new_node;
@@ -88,7 +107,7 @@ int	env_buildin(t_data *data, t_token **token)
 	if (!data->env)
 		return (data->exit_code = 1);
 	if (num_of_type(token, ARGS, PIPE) > 0 && !search_tokens(token, PIPE))
-	 	return (data->exit_code = 1);
+		return (data->exit_code = 1);
 	cur = data->env;
 	while (cur)
 	{
@@ -98,3 +117,4 @@ int	env_buildin(t_data *data, t_token **token)
 	}
 	return (data->exit_code = 0);
 }
+

@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 16:56:56 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 14:20:02 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,11 +125,12 @@ void	go_at_start(t_token **token);
 bool	check_files(t_data *data, t_token **token);
 char	*trim_to_del(t_data *data, char *str, char del);
 t_env	*copy_env_list(t_env *env);
+char	*ft_getenv(t_env **env, char *var);
 
 //-----------------------------FREE/ERROR-------------------------------//
 
 void	free_env(t_env **head);
-void	free_linked(t_token *head);
+//void	free_linked(t_token *head);
 void	free2d(char **a);
 void	*gc_malloc(t_gc *gc, size_t size);
 void	gc_destroy(t_gc *gc);
@@ -152,17 +153,22 @@ int		num_of_type(t_token **token, t_token_type type, t_token_type until);
 
 void	init(int ac, char **av, char **envp, t_data *data);
 void	lexer(t_data *data, char *input, t_token **token);
+void	bullshit(t_data *data, t_token **token, int *i, char *input);
+char	*wraper_sign(t_data *data, char *input, int *i);
+char	*wraper_quotes(t_data *data, char *input, int *i, char c);
+void	bullshit2(t_data *data, t_token **token, int *i, char *input);
 void	expansion(t_token **token, t_data *data);
 bool	classify_tokens(t_data *data, t_token **token);
 void	merge(t_data *data, t_token **token);
 void	_expand_variables(t_data *data, char *input, char **exp_result);
+bool	check_quotes(char *input);
 
 //-----------------------------SIGNALS----------------------------------//
 
 void	sigint_handler(int sig);
 void	sigtstp_handler(int sig);
 void	sigchld_handler(int sig);
-void 	restore_terminal(void);
+void	restore_terminal(void);
 void	disable_echoctl(void);
 
 //----------------------------EXECUTION---------------------------------//
@@ -171,7 +177,6 @@ void	check_heredoc(t_data *data, t_token **token, bool flag);
 void	handle_pipeline(t_data *data, int num_pipes);
 bool	redirections(t_data *data, t_token **token, bool flag);
 void	try_to_exec(t_data *data, t_token **token);
-bool	check_quotes(char *input);
 
 //--------------------------BUILTINS-------------------------------//
 int		env_buildin(t_data *data, t_token **t_token);
@@ -186,11 +191,6 @@ int		exit_builtin(t_data *data, t_token **token);
 int		echo_builtin(t_data *data, t_token **token);
 
 //--------------------------TESTING_BENCH-------------------------------//
-void	print_tokens(t_token **token);
-void	print_linked(t_env **ll);
-void	print_tokens(t_token **token);
-void	check_leaks(void);
 char	*get_next_line(int fd);
-void	p(void);
 
 #endif // !MINISHELL_H

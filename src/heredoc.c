@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:27:55 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 14:45:01 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static void	_heredoc(t_data *data, char *del, int fd)
 {
 	char	*line;
-	char	*expanded_line;
 
 	while ("Grapse Malaka")
 	{
@@ -27,27 +26,28 @@ static void	_heredoc(t_data *data, char *del, int fd)
 		}
 		if (ft_strchr(line, '$'))
 		{
-			_expand_variables(data, line, &expanded_line);
-			if (!ft_strcmp(expanded_line, del))
+			_expand_variables(data, line, &line);
+			if (!ft_strcmp(line, del))
 			{
 				free (line);
 				break ;
 			}
-			ft_putendl_fd(expanded_line, fd);
+			ft_putendl_fd(line, fd);
 		}
 		else
 			ft_putendl_fd(line, fd);
 		free (line);
 	}
-	close (fd);
-	exit(0);
+	return (close (fd), (void)exit(0));
 }
 
 static void	heredoc_final(t_data *data, t_heredoc *heredoc, int pid)
 {
 	int		i;
-	char	*args[] = {"cat", NULL};
+	char	*args[2];
 
+	args[0] = "cat";
+	args[1] = NULL;
 	i = -1;
 	while (++i < heredoc->num)
 		waitpid(pid, NULL, 0);
@@ -116,3 +116,4 @@ void	check_heredoc(t_data *data, t_token **token, bool flag)
 	}
 	heredoc_init(data, data->heredoc, flag);
 }
+

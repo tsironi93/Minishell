@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/25 11:34:04 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 14:45:30 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,23 +69,6 @@ static int	up_a_level(t_data *data, t_token *cur)
 	return (data->exit_code);
 }
 
-char	*ft_getenv(t_env **env, char *var)
-{
-	t_env	*cur;
-
-	cur = *env;
-	while (cur)
-	{
-		if (!ft_strncmp(cur->str, var, ft_strlen(var))
-			&& cur->str[ft_strlen(var)] == '=')
-		{
-			return (cur->str + ft_strlen(var) + 1);
-		}
-		cur = cur->next;
-	}
-	return ("");
-}
-
 static int	cd_helper(t_data *data, char *next_dir, bool flag)
 {
 	char	*tmp;
@@ -141,3 +124,4 @@ int	cd_buildin(t_data *data, t_token **token)
 	else
 		return (current_dir(data, cur));
 }
+

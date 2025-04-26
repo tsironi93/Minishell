@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:38:17 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 12:33:12 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,6 @@ static void	init_env(t_data *data, char **envp)
 
 void	init(int ac, char **av, char **envp, t_data *data)
 {
-	//atexit(check_leaks);
 	(void)ac;
 	(void)av;
 	disable_echoctl();
@@ -76,9 +75,10 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	data->input = NULL;
 	data->exit_code = 0;
 	init_env(data, envp);
-	data->env_cmd_paths = ft_split(getenv("PATH"), ':'); //NEEDS TO CHANGE
+	data->env_cmd_paths = ft_split(getenv("PATH"), ':');
 	init_buildins(&data->buildins);
 	signal(SIGINT, sigint_handler);
 	signal(SIGTSTP, sigtstp_handler);
 	signal(SIGCHLD, sigchld_handler);
 }
+

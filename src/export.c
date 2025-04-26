@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:51 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/25 16:56:26 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 14:35:43 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,19 +67,22 @@ int	is_valid_identifier(t_data *data, char *cmd, char *str)
 
 	i = 0;
 	if (!ft_isalpha(str[0]) && str[0] != '_')
-		return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
-			ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
+		return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2),
+			ft_putstr_fd(cmd, 2), ft_putstr_fd(": `", 2),
+			ft_putstr_fd(str, 2),
 			ft_putendl_fd("': not a valid identifier", 2), 0);
 	while (str[i] && str[i] != '=')
 	{
 		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+			return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2),
+				ft_putstr_fd(cmd, 2),
 				ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
 				ft_putendl_fd("': not a valid identifier", 2), 0);
 		i++;
 	}
 	if (!ft_strcmp(cmd, "unset") && str[i] == '=')
-		return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2), ft_putstr_fd(cmd, 2),
+		return (data->exit_code = 1, ft_putstr_fd("minishell: ", 2),
+			ft_putstr_fd(cmd, 2),
 			ft_putstr_fd(": `", 2), ft_putstr_fd(str, 2),
 			ft_putendl_fd("': not a valid identifier", 2), 0);
 	return (1);
@@ -132,3 +135,4 @@ int	export_builtin(t_data *data, t_env **env, t_token **token)
 	}
 	return (data->exit_code = 0);
 }
+

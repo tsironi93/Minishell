@@ -6,7 +6,7 @@
 /*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:26:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/03/31 10:24:37 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 14:33:26 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,3 +55,4 @@ void	append_node(t_env **head, char *value)
 		temp = temp->next;
 	temp->next = new_node;
 }
+

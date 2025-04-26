@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:29:14 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 17:19:48 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 13:20:57 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static bool	find_file(t_data *data, t_token **token, t_token_type type)
 	if (cur->type == UNKNOWN || cur->type == DOUBLE_QUOTES
 		|| cur->type == SINGLE_QUOTES)
 		cur->type = type + 1;
-	// else (cur->type == APPEND || cur->type == REDIRECT_INP
-	// 	|| cur->type == REDIRECT_OUT || cur->type == HERE_DOC)
 	else
 		return (ft_putendl_fd("minishell: syntax error near unexpected token",
 				2), data->exit_code = 2, false);
@@ -86,10 +84,8 @@ static bool	classify_util(t_data *data, t_token **token, t_token_type type)
 			return (false);
 	}
 	else if (type == HERE_DOC)
-	{
 		if (!find_file(data, &temp, HERE_DOC))
 			return (false);
-	}
 	if (temp->next)
 		*token = temp->next;
 	return (true);
@@ -119,3 +115,4 @@ bool	classify_tokens(t_data *data, t_token **token)
 		return (false);
 	return (true);
 }
+

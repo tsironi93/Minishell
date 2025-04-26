@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 18:26:35 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 11:54:25 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 12:21:22 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,9 @@ void	gc_collect(t_gc *gc)
 
 t_gc	gc_new(void)
 {
-	t_gc	gc = {0};
+	t_gc	gc;
+
+	gc = (t_gc){0};
 	return (gc);
 }
 
