@@ -17,10 +17,13 @@ OBJ_DIR			=	src_o
 SRC_BONUS_DIR	=	src_bonus
 OBJ_BONUS_DIR	=	src_bonus_o
 
-SRC			=	$(wildcard $(SRC_DIR)/*.c)
+SRC			=	src/basic_linked.c src/cd.c src/classify.c src/echo.c src/env.c \
+src/error_exit.c src/execution_utils.c src/execution.c src/exit.c src/expansion_utils.c \
+src/expansion.c src/export.c src/garbage_colector.c src/gc_wrappers.c src/heredoc.c \
+src/init.c src/lexer_helpers.c src/lexer.c src/main.c src/pipe.c src/pwd.c src/redirections.c \
+src/signals.c src/syntax_errors.c src/token_linked.c src/unset.c src/utils.c \
+
 OBJ			=	$(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC))
-SRC_BONUS	=	$(wildcard $(SRC_BONUS_DIR)/*.c)
-OBJ_BONUS	=	$(patsubst $(SRC_BONUS_DIR)/%.c, $(OBJ_BONUS_DIR)/%.o, $(SRC_BONUS))
 
 # COLORS
 BLUE	= 	\033[38;5;27m
