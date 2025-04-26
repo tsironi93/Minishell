@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 19:10:55 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 20:01:12 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ bool	check_files(t_data *data, t_token **token);
 char	*trim_to_del(t_data *data, char *str, char del);
 t_env	*copy_env_list(t_env *env);
 char	*ft_getenv(t_env **env, char *var);
+int		ft_strcmp(const char *s1, const char *s2);
 
 //-----------------------------FREE/ERROR-------------------------------//
 
