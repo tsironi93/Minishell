@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:26:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 15:07:03 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 19:12:16 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ int	main(int ac, char **av, char **envp)
 		clean(&data, false);
 		if (isatty(fileno(stdin)))
 			data.input = gc_readline(&data.gc, "~>:");
-		else
-			data.input = get_next_line(fileno(stdin));
 		input_verification(&data);
 		if (!check_quotes(data.input))
 			continue ;

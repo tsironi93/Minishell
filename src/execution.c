@@ -6,13 +6,13 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 14:45:42 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/25 16:32:14 by ckappe           ###   ########.fr       */
+/*   Updated: 2025/04/26 18:29:36 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-static bool	check_buildin(t_data *data, char *cmd)
+bool	check_buildin(t_data *data, char *cmd)
 {
 	int	i;
 
@@ -23,7 +23,7 @@ static bool	check_buildin(t_data *data, char *cmd)
 	return (false);
 }
 
-static void	to_buildin(t_data *data, char *cmd, t_token **token)
+void	to_buildin(t_data *data, char *cmd, t_token **token)
 {
 	if (!ft_strcmp(cmd, "pwd"))
 		pwd_buildin(data);
@@ -41,55 +41,10 @@ static void	to_buildin(t_data *data, char *cmd, t_token **token)
 		echo_builtin(data, token);
 }
 
-static char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag)
-{
-	char	*path;
-	char	*tmp;
-	char	*tmp_cmd;
-	char	buf[1024];
-
-	tmp_cmd = NULL;
-	if (!flag && cmd[0] == '/')
-		tmp_cmd = trim_to_del(data, cmd, '/');
-	else if (cmd[0] == '.' && cmd[1] == '/')
-		return (gc_strjoin(&data->gc, getcwd(buf, 1024), ++cmd));
-	else
-		tmp_cmd = gc_strdup(&data->gc, cmd);
-	while (*dirs)
-	{
-		tmp = ft_strjoin(*dirs, "/");
-		path = gc_strjoin(&data->gc, tmp, tmp_cmd);
-		free(tmp);
-		if (access(path, X_OK) == 0)
-			return (path);
-		dirs++;
-	}
-	data->exit_code = 127;
-		perror("command not found");
-	return (NULL);
-}
-
-static unsigned int	_num_of_args(t_token **token, t_token_type type)
-{
-	t_token			*temp;
-	unsigned int	i;
-
-	temp = *token;
-	i = 0;
-	while (temp)
-	{
-		if (temp->type == type)
-			i++;
-		temp = temp->next;
-	}
-	return (i);
-}
-
 static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 {
-	int		pid;
-	int		status;
 	t_token	*temp;
+	int		status;
 
 	status = 0;
 	temp = search_tokens(token, COMMAND);
@@ -106,61 +61,50 @@ static void	do_i_fork(t_data *data, t_token **token, char **cmd, char *cmd_path)
 		{
 			execve(cmd_path, cmd, data->env_full);
 			data->exit_code = WEXITSTATUS(status);
-			exit (data->exit_code);
 			perror("execve failed\n");
+			exit (data->exit_code);
 		}
 	}
 	else
-	{
-		if (check_buildin(data, temp->value))
-		{
-			if (!redirections(data, token, true))
-				return ;
-			to_buildin(data, temp->value, &temp);
-			return ;
-		}
-		pid = fork();
-		signal(SIGQUIT, SIG_DFL);
-		signal(SIGINT, SIG_DFL);
-		if (pid == 0)
-		{
-			if (!redirections(data, token, true))
-				return ;
-			execve(cmd_path, cmd, data->env_full);
-			perror("execve failed");
-			exit(errno);
-		}
-		else if (pid > 0)
-		{
-			signal(SIGQUIT, SIG_IGN);
-			signal(SIGINT, sigint_handler);
-			g_child_pid = pid;
-			waitpid(pid, &status, 0);
-			g_child_pid = -1;
-			if (WIFEXITED(status))
-				data->exit_code = WEXITSTATUS(status);
-			else if (WIFSIGNALED(status))
-				data->exit_code = 128 + WTERMSIG(status);
-			else
-				data->exit_code = 1;
-		}
-	}
+		execute_one_cmd(data, temp, cmd_path, cmd);
 	cmd = NULL;
+}
+
+static void	not_a_buildin(t_data *data, t_token **token, t_token *temp,
+		bool flag)
+{
+	char	*cmd_path;
+	char	**cmd;
+	int		i;
+
+	i = 0;
+	cmd = NULL;
+	cmd_path = NULL;
+	cmd_path = _find_exec(data, temp->value, data->env_cmd_paths, flag);
+	if (!cmd_path)
+		return ;
+	cmd = gc_malloc(&data->gc, (num_of_type(token, ARGS, NULLL) + 2)
+			* sizeof(char *));
+	cmd[i++] = gc_strdup(&data->gc, temp->value);
+	while (temp && temp->type != PIPE)
+	{
+		if (temp->type == ARGS)
+			cmd[i++] = gc_strdup(&data->gc, temp->value);
+		temp = temp->next;
+	}
+	cmd[i] = NULL;
+	do_i_fork(data, token, cmd, cmd_path);
 }
 
 void	try_to_exec(t_data *data, t_token **token)
 {
 	t_token			*temp;
-	char			**cmd;
-	char			*cmd_path;
 	unsigned int	i;
 	bool			flag;
 
 	i = 0;
 	flag = false;
 	temp = *token;
-	cmd = NULL;
-	cmd_path = NULL;
 	while (temp)
 	{
 		if (temp->type == COMMAND || temp->type == COMMAND_EX)
@@ -175,18 +119,8 @@ void	try_to_exec(t_data *data, t_token **token)
 		flag = false;
 	if (!check_buildin(data, temp->value))
 	{
-		cmd_path = _find_exec(data, temp->value, data->env_cmd_paths, flag);
-		if (!cmd_path)
-			return ;
-		cmd = gc_malloc(&data->gc, (_num_of_args(token, ARGS) + 2) * sizeof(char *));
-		cmd[i++] = gc_strdup(&data->gc, temp->value);
-		while (temp && temp->type != PIPE)
-		{
-			if (temp->type == ARGS)
-				cmd[i++] = gc_strdup(&data->gc, temp->value);
-			temp = temp->next;
-		}
-		cmd[i] = NULL;
+		not_a_buildin(data, token, temp, flag);
+		return ;
 	}
-	do_i_fork(data, token, cmd, cmd_path);
+	do_i_fork(data, token, NULL, NULL);
 }

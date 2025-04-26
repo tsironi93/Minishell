@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 11:28:57 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 14:20:02 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 19:10:55 by itsiros          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ typedef struct s_data
 {
 	t_token		*tokens;
 	char		**buildins;
-	char		***export_table;
 	t_gc		gc;
 	char		*input;
 	char		**env_full;
@@ -158,6 +157,11 @@ char	*wraper_sign(t_data *data, char *input, int *i);
 char	*wraper_quotes(t_data *data, char *input, int *i, char c);
 void	bullshit2(t_data *data, t_token **token, int *i, char *input);
 void	expansion(t_token **token, t_data *data);
+void	expand_var_helper(t_data *data, char *input, int *i, char **exp_result);
+void	save_in_buffer(t_data *data, char *input, int *i, char **exp_result);
+void	_append_expansion(t_data *data, char **arg, char **name);
+char	*_find_env_path(char **env_list, char *search_key);
+void	dq_expansion(t_token *cur);
 bool	classify_tokens(t_data *data, t_token **token);
 void	merge(t_data *data, t_token **token);
 void	_expand_variables(t_data *data, char *input, char **exp_result);
@@ -177,6 +181,14 @@ void	check_heredoc(t_data *data, t_token **token, bool flag);
 void	handle_pipeline(t_data *data, int num_pipes);
 bool	redirections(t_data *data, t_token **token, bool flag);
 void	try_to_exec(t_data *data, t_token **token);
+void	execute_one_cmd(t_data *data, t_token *temp, char *cmd_path,
+			char **cmd);
+void	fork_single_command(t_data *data, char *cmd_path, char **cmd, int pid);
+void	execute_buildin(t_data *data, t_token **token, t_token *temp);
+void	finished_child(t_data *data, int pid);
+char	*_find_exec(t_data *data, char *cmd, char **dirs, bool flag);
+bool	check_buildin(t_data *data, char *cmd);
+void	to_buildin(t_data *data, char *cmd, t_token **token);
 
 //--------------------------BUILTINS-------------------------------//
 int		env_buildin(t_data *data, t_token **t_token);
