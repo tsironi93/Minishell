@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/22 16:56:40 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 13:17:33 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:06:50 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,3 @@ void	lexer(t_data *data, char *input, t_token **token)
 			lexer_2(data, input, token, &i);
 	}
 }
-

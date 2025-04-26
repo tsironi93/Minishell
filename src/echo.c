@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/15 14:24:35 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/26 14:53:38 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:05:40 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ int	echo_builtin(t_data *data, t_token **token)
 	bool	space_flag;
 
 	space_flag = false;
-	data->exit_code = 0;
 	cur = *token;
 	new_line = 1;
 	while (cur && cur->type != ARGS)
@@ -75,6 +74,5 @@ int	echo_builtin(t_data *data, t_token **token)
 	}
 	if (new_line)
 		printf("\n");
-	return (data->exit_code);
+	return (data->exit_code = 0);
 }
-

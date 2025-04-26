@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/25 10:29:14 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 13:20:57 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:04:51 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,4 +115,3 @@ bool	classify_tokens(t_data *data, t_token **token)
 		return (false);
 	return (true);
 }
-

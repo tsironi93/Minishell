@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/13 09:32:55 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 12:33:12 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:06:44 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,4 +81,3 @@ void	init(int ac, char **av, char **envp, t_data *data)
 	signal(SIGTSTP, sigtstp_handler);
 	signal(SIGCHLD, sigchld_handler);
 }
-

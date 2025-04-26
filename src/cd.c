@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 09:16:10 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/26 14:45:30 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:04:45 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,4 +124,3 @@ int	cd_buildin(t_data *data, t_token **token)
 	else
 		return (current_dir(data, cur));
 }
-

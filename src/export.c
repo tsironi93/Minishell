@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/14 15:23:51 by ckappe            #+#    #+#             */
-/*   Updated: 2025/04/26 14:35:43 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:06:38 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,4 +135,3 @@ int	export_builtin(t_data *data, t_env **env, t_token **token)
 	}
 	return (data->exit_code = 0);
 }
-

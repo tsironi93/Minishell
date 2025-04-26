@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   basic_linked.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/23 17:26:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 14:33:26 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:04:39 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,3 @@ void	append_node(t_env **head, char *value)
 		temp = temp->next;
 	temp->next = new_node;
 }
-

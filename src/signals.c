@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/18 16:33:49 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 15:02:04 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:04:26 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,3 @@ void	sigchld_handler(int sig)
 	while (waitpid(-1, NULL, WNOHANG) > 0)
 		i++;
 }
-

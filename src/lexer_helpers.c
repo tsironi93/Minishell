@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: itsiros <itsiros@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 13:15:10 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 13:17:25 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:06:57 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,4 +89,3 @@ void	bullshit2(t_data *data, t_token **token, int *i, char *input)
 		append_token(data, token, buf, ARGS);
 	}
 }
-

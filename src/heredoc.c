@@ -6,7 +6,7 @@
 /*   By: ckappe <ckappe@student.42heilbronn.de>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 20:05:31 by itsiros           #+#    #+#             */
-/*   Updated: 2025/04/26 14:45:01 by itsiros          ###   ########.fr       */
+/*   Updated: 2025/04/26 15:04:16 by ckappe           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,4 +116,3 @@ void	check_heredoc(t_data *data, t_token **token, bool flag)
 	}
 	heredoc_init(data, data->heredoc, flag);
 }
-
