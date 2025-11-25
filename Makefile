@@ -1,4 +1,3 @@
-
 NAME		=	minishell
 BONUS_NAME	= 	_bonus
 
